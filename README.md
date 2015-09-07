@@ -4,7 +4,7 @@
 
 PHP 5.3.3 and later.
 
-## Composer (準備中)
+## Composer
 
 You can install the bindings via [Composer](http://getcomposer.org/). Add this to your `composer.json`:
 
@@ -39,7 +39,8 @@ Simple usage looks like:
 
 ## Documentation
 
-Please see our official [documentation](http://docs.pay.jp).
+- [Request Example](https://github.com/payjp/payjp-php/blob/master/RequestExample.md)
+- Please see our official [documentation](http://docs.pay.jp).
 
 ## Tests
 
