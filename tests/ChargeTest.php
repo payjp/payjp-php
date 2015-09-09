@@ -80,24 +80,24 @@ class ChargeTest extends TestCase
         $d = Charge::retrieve($c->id);
         $this->assertSame($d->id, $c->id);
     }
-    
+
     //GET /charges/
     public function testAll()
     {
         self::authorizeFromEnv();
-    
+
         $charges = Charge::all(
             array(
                     'limit' => 3,
                     'offset' => 10
             )
         );
-        
+
         $planID = 'gold-' . self::randomString();
         self::retrieveOrCreatePlan($planID);
-        
+
         $customer = self::createTestCustomer();
-        
+
         $charge = Charge::create(
             array(
                     'amount' => 1000,
@@ -105,7 +105,7 @@ class ChargeTest extends TestCase
                     'customer' => $customer->id
             )
         );
-        
+
         $charges_2 = Charge::all(
             array(
                     'customer' => $customer->id
@@ -114,7 +114,7 @@ class ChargeTest extends TestCase
 
         $this->assertSame(1, count($charges_2['data']));
         $this->assertSame($charge->id, $charges_2['data'][0]->id);
-        
+
         $charge_2 = Charge::create(
             array(
                     'amount' => 1500,
@@ -122,7 +122,7 @@ class ChargeTest extends TestCase
                     'customer' => $customer->id
             )
         );
-        
+
         $charges_3 = Charge::all(
             array(
                     'limit' => 2,
@@ -130,21 +130,21 @@ class ChargeTest extends TestCase
                     'customer' => $customer->id
             )
         );
-         
+
         $this->assertSame(2, count($charges_3['data']));
     }
-    
+
     //POST /charges/:id
     public function testUpdateDescription()
     {
         self::authorizeFromEnv();
-         
+
         $card = array(
                 'number' => '4242424242424242',
                 'exp_month' => 5,
                 'exp_year' => date('Y') + 1
         );
-         
+
         $charge = Charge::create(
             array(
                     'amount' => 100,
@@ -152,26 +152,26 @@ class ChargeTest extends TestCase
                     'card' => $card
             )
         );
-         
+
         $charge->description = 'foo bar';
         $charge->save();
-         
+
         $updatedCharge = Charge::retrieve($charge->id);
         $this->assertSame('foo bar', $updatedCharge->description);
         $this->assertSame('foo bar', $charge->description);
     }
-    
+
     //POST /charges/:id/capture
     public function testCaptureAll()
     {
         self::authorizeFromEnv();
-         
+
         $card = array(
                 'number' => '4242424242424242',
                 'exp_month' => 5,
                 'exp_year' => date('Y') + 1
         );
-         
+
         $charge = Charge::create(
             array(
                     'amount' => 100,
@@ -180,25 +180,25 @@ class ChargeTest extends TestCase
                     'capture' => false
             )
         );
-        
+
         $this->assertFalse($charge->captured);
-         
+
         $capturedCharge = $charge->capture();
         $this->assertTrue($charge->captured);
         $this->assertTrue($capturedCharge->captured);
     }
-    
+
     //POST /charges/:id/capture
     public function testCapturePart()
     {
         self::authorizeFromEnv();
-    
+
         $card = array(
                 'number' => '4242424242424242',
                 'exp_month' => 5,
                 'exp_year' => date('Y') + 1
         );
-    
+
         $charge = Charge::create(
             array(
                     'amount' => 100,
@@ -207,25 +207,25 @@ class ChargeTest extends TestCase
                     'capture' => false
             )
         );
-        
+
         $this->assertFalse($charge->captured);
-    
+
         $capturedCharge = $charge->capture(array('amount'=>50));
         $this->assertTrue($capturedCharge->captured);
         $this->assertTrue($charge->captured);
     }
-    
+
     //POST /charges/:id/refund
     public function testRefund()
     {
         self::authorizeFromEnv();
-    
+
         $card = array(
                 'number' => '4242424242424242',
                 'exp_month' => 5,
                 'exp_year' => date('Y') + 1
         );
-    
+
         $charge = Charge::create(
             array(
                     'amount' => 100,
@@ -233,29 +233,29 @@ class ChargeTest extends TestCase
                     'card' => $card,
             )
         );
-        
+
         $this->assertTrue($charge->captured);
-    
+
         $redundChargePart = $charge->refund(
             array(
                     'amount' => 50,
                     'refund_reason' => 'foo bar 1'
             )
         );
-        
+
         $this->assertTrue($redundChargePart->refunded);
         $this->assertSame('foo bar 1', $redundChargePart->refund_reason);
         $this->assertSame(50, $redundChargePart->amount_refunded);
         $this->assertTrue($charge->refunded);
         $this->assertSame('foo bar 1', $charge->refund_reason);
         $this->assertSame(50, $charge->amount_refunded);
-        
+
         $refundChargeAll = $charge->refund(
             array(
                     'refund_reason' => 'foo bar 2'
             )
         );
-        
+
         $this->assertTrue($refundChargeAll->refunded);
         $this->assertSame('foo bar 2', $refundChargeAll->refund_reason);
         $this->assertSame(100, $refundChargeAll->amount_refunded);
@@ -263,20 +263,20 @@ class ChargeTest extends TestCase
         $this->assertSame('foo bar 2', $charge->refund_reason);
         $this->assertSame(100, $charge->amount_refunded);
     }
-    
+
     /**
-     * @expectedException Payjp\Error\InvalidRequest
+     * @expectedException Payjp\Error\Card
      */
     public function testInvalidCard()
     {
         self::authorizeFromEnv();
-        
+
         $card = array(
                 'number' => '4242424242424241',
                 'exp_month' => 5,
                 'exp_year' => date('Y') + 1
         );
-        
+
         Charge::create(
             array(
                     'amount' => 100,
@@ -285,17 +285,17 @@ class ChargeTest extends TestCase
             )
         );
     }
-    
+
     public function testDeclinedCard()
     {
         self::authorizeFromEnv();
-         
+
         $card = array(
                 'number' => '4000000000000002',
                 'exp_month' => 5,
                 'exp_year' => date('Y') + 1
         );
-         
+
 
         try {
             Charge::create(
@@ -305,26 +305,26 @@ class ChargeTest extends TestCase
                         'card' => $card
                 )
             );
-        } catch (Error\InvalidRequest $e) {
+        } catch (Error\Card $e) {
             $actual = $e->getJsonBody();
-            
-            $this->assertSame(400, $e->getHttpStatus());
+
+            $this->assertSame(402, $e->getHttpStatus());
             $this->assertSame('card_error', $actual['error']['type']);
             $this->assertSame('card_declined', $actual['error']['code']);
         }
     }
-    
+
     public function testExpiredNumber()
     {
         self::authorizeFromEnv();
-    
+
         $card = array(
                 'number' => '4000000000000066',
                 'exp_month' => 5,
                 'exp_year' => date('Y') + 1
         );
-    
-    
+
+
         try {
             Charge::create(
                 array(
@@ -333,26 +333,26 @@ class ChargeTest extends TestCase
                         'card' => $card
                 )
             );
-        } catch (Error\InvalidRequest $e) {
+        } catch (Error\Card $e) {
             $actual = $e->getJsonBody();
-    
-            $this->assertSame(400, $e->getHttpStatus());
+
+            $this->assertSame(402, $e->getHttpStatus());
             $this->assertSame('card_error', $actual['error']['type']);
             $this->assertSame('expired_card', $actual['error']['code']);
         }
     }
-    
+
     public function testIncorrectCvcNumber()
     {
         self::authorizeFromEnv();
-    
+
         $card = array(
                 'number' => '4000000000000890',
                 'exp_month' => '05',
                 'exp_year' => (date('Y') + 1).""
         );
-    
-    
+
+
         try {
             Charge::create(
                 array(
@@ -361,26 +361,26 @@ class ChargeTest extends TestCase
                         'card' => $card
                 )
             );
-        } catch (Error\InvalidRequest $e) {
+        } catch (Error\Card $e) {
             $actual = $e->getJsonBody();
-    
-            $this->assertSame(400, $e->getHttpStatus());
+
+            $this->assertSame(402, $e->getHttpStatus());
             $this->assertSame('card_error', $actual['error']['type']);
             $this->assertSame('invalid_cvc', $actual['error']['code']);
         }
     }
-    
+
     public function testProceErrorNumber()
     {
         self::authorizeFromEnv();
-    
+
         $card = array(
                 'number' => '4000000000000123',
                 'exp_month' => '05',
                 'exp_year' => (date('Y') + 1).""
         );
-    
-    
+
+
         try {
             Charge::create(
                 array(
@@ -389,26 +389,26 @@ class ChargeTest extends TestCase
                         'card' => $card
                 )
             );
-        } catch (Error\InvalidRequest $e) {
+        } catch (Error\Card $e) {
             $actual = $e->getJsonBody();
-    
-            $this->assertSame(400, $e->getHttpStatus());
+
+            $this->assertSame(402, $e->getHttpStatus());
             $this->assertSame('card_error', $actual['error']['type']);
             $this->assertSame('processing_error', $actual['error']['code']);
         }
     }
-    
+
     public function testInvalidAddressZipTest()
     {
         self::authorizeFromEnv();
-    
+
         $card = array(
                 'number' => '4000000000000070',
                 'exp_month' => '05',
                 'exp_year' => (date('Y') + 1) .""
         );
-    
-    
+
+
 
         $ch = Charge::create(
             array(
@@ -417,22 +417,22 @@ class ChargeTest extends TestCase
                     'card' => $card
             )
         );
-        
+
         $this->assertSame("failed", $ch->card->address_zip_check);
     }
-    
+
     public function testInvalidCvcTest()
     {
         self::authorizeFromEnv();
-    
+
         $card = array(
                 'number' => '4000000000000100',
                 'exp_month' => '05',
                 'exp_year' => (date('Y') + 1) .""
         );
-    
-    
-    
+
+
+
         $ch = Charge::create(
             array(
                     'amount' => 100,
@@ -440,20 +440,20 @@ class ChargeTest extends TestCase
                     'card' => $card
             )
         );
-         
+
         $this->assertSame("failed", $ch->card->cvc_check);
     }
-    
+
     public function testUnavailableCvcTest()
     {
         self::authorizeFromEnv();
-    
+
         $card = array(
                 'number' => '4000000000000150',
                 'exp_month' => '05',
                 'exp_year' => (date('Y') + 1) .""
         );
-     
+
         $ch = Charge::create(
             array(
                     'amount' => 100,
@@ -461,7 +461,7 @@ class ChargeTest extends TestCase
                     'card' => $card
             )
         );
-    
+
         $this->assertSame("unavailable", $ch->card->cvc_check);
     }
 }
