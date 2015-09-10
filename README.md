@@ -1,5 +1,7 @@
 # PAY.JP for PHP
 
+[![Build Status](https://travis-ci.org/payjp/payjp-php.svg?branch=master)](https://travis-ci.org/payjp/payjp-php)
+
 ## Requirements
 
 PHP 5.3.3 and later.
