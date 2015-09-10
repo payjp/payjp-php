@@ -23,52 +23,38 @@ class SubscriptionTest extends TestCase
         $this->assertSame($sub->trial_end, null);
         $this->assertSame($sub->plan->id, $planID);
 
-        $planID_2 = 'gold-2-' . self::randomString();
-        self::retrieveOrCreatePlan($planID_2);
-
-        $sub->plan = $planID_2;
-        
-        $sub->save();
-
         $sub_retrieve = Subscription::retrieve($sub->id);
 
-        $this->assertSame($sub_retrieve->status, 'active');
-        $this->assertSame($sub_retrieve->plan->id, $planID_2);
-        $this->assertSame($sub_retrieve->trial_end, null);
-        
         $sub->pause();
-        
+
         $sub_pause = Subscription::retrieve($sub->id);
         $this->assertSame($sub_pause->status, 'paused');
-        
+
         $sub->resume();
         $sub_resume = Subscription::retrieve($sub->id);
         $this->assertSame($sub_resume->status, 'active');
-        
+
         $resuumed_at = $sub->created + 10000;
-        
-        $sub->pause(
-            array(
-                'resumed_at' => $resuumed_at
-            )
-        );
-        
+
+        $sub->pause();
+
         $sub_pause = Subscription::retrieve($sub->id);
         $this->assertSame($sub_pause->status, 'paused');
-        $this->assertSame($resuumed_at, $sub->resumed_at);
+        $this->assertSame(null, $sub->resumed_at);
 
         $trial_end = $sub->created + 5000;
-        
+
         $sub->resume(
             array(
                 'trial_end' => $trial_end
             )
         );
-          
+
         $sub_resume = Subscription::retrieve($sub->id);
-        $this->assertSame($sub_resume->status, 'trial');
-        $this->assertSame($trial_end, $sub->trial_end);
-        
+        $this->assertSame($sub_resume->status, 'active');
+        $this->assertSame(0, $sub->plan->amount);
+        $this->assertSame(null, $sub->trial_end);
+
         try {
             $sub->cancel(
                 array(
@@ -80,9 +66,9 @@ class SubscriptionTest extends TestCase
 
             $this->assertSame('Parameters are not allowed: /v1/subscriptions/'.$sub->id.'/cancel', $actual['error']['message']);
         }
-        
+
         $sub->cancel();
-        
+
         $sub_cancel = Subscription::retrieve($sub->id);
         $this->assertSame($sub_cancel->status, 'canceled');
 
@@ -91,71 +77,38 @@ class SubscriptionTest extends TestCase
         $this->assertSame($sub_id, $sub->id);
         $this->assertTrue($sub->deleted);
     }
-    
-    public function testUpdate()
-    {
-        $planID = 'gold-' . self::randomString();
-        self::retrieveOrCreatePlan($planID);
-        
-        $customer = self::createTestCustomer();
-        
-        $sub = Subscription::create(
-            array(
-                'customer' => $customer->id,
-                'plan' => $planID
-            )
-        );
-        
-        $this->assertSame($sub->status, 'active');
-        $this->assertSame($sub->trial_end, null);
-        $this->assertSame($sub->plan->id, $planID);
-        
-        $planID_2 = 'gold-2-' . self::randomString();
-        self::retrieveOrCreatePlan($planID_2);
-        
-        $trial_end = time()+10000;
-        
-        $sub->plan = $planID_2;
-        $sub->trial_end = $trial_end;
-        $sub->save();
-        
-        $sub_retrieve = Subscription::retrieve($sub->id);
-        $this->assertSame($sub_retrieve->status, 'trial');
-        $this->assertSame($sub_retrieve->plan->id, $planID_2);
-        $this->assertSame($sub_retrieve->trial_end, $trial_end);
-    }
-    
+
     public function testAll()
     {
         $planID = 'gold-' . self::randomString();
         self::retrieveOrCreatePlan($planID);
-        
+
         $customer = self::createTestCustomer();
-        
+
         $sub = Subscription::create(
             array(
                 'customer' => $customer->id,
                 'plan' => $planID
             )
         );
-        
+
         $planID_2 = 'gold-2-' . self::randomString();
         self::retrieveOrCreatePlan($planID_2);
-        
+
         $sub_2 = Subscription::create(
             array(
                 'customer' => $customer->id,
                 'plan' => $planID_2
             )
         );
-        
+
         $subs = Subscription::all(
             array(
                 'limit' => 2,
                 'offset' => 0
             )
         );
-        
+
         $this->assertSame(2, count($subs['data']));
     }
 }
