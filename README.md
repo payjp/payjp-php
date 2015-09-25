@@ -22,13 +22,13 @@ Then install via:
 
 To use the bindings, use Composer's [autoload](https://getcomposer.org/doc/00-intro.md#autoloading):
 
-    require_once('vendor/autoload.php');
+    require_once 'vendor/autoload.php';
 
 ## Manual Installation
 
 If you do not wish to use Composer, you can download the [latest release](https://github.com/payjp/payjp-php/releases). Then, to use the bindings, include the `init.php` file.
 
-    require_once('/path/to/payjp-php/init.php');
+    require_once '/path/to/payjp-php/init.php';
 
 ## Getting Started
 
