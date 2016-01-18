@@ -51,9 +51,9 @@ class SubscriptionTest extends TestCase
         );
 
         $sub_resume = Subscription::retrieve($sub->id);
-        $this->assertSame($sub_resume->status, 'active');
-        $this->assertSame(0, $sub->plan->amount);
-        $this->assertSame(null, $sub->trial_end);
+        $this->assertSame($sub_resume->status, 'trial');
+        $this->assertSame(500, $sub->plan->amount);
+        $this->assertSame($trial_end, $sub->trial_end);
 
         try {
             $sub->cancel(
