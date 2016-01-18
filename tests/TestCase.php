@@ -137,7 +137,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             $plan = Plan::create(
                 array(
                     'id' => $id,
-                    'amount' => 0,
+                    'amount' => 500,
                     'currency' => self::CURRENCY,
                     'interval' => 'month',
                     'name' => 'Gold Test Plan',
