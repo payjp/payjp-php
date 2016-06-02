@@ -47,6 +47,17 @@ class RequestOptionsTest extends TestCase
         $this->assertSame(array('Idempotency-Key' => 'foo'), $opts->headers);
     }
 
+    public function testLocaleArray()
+    {
+        $opts = Util\RequestOptions::parse(
+            array(
+                'locale' => 'ja',
+            )
+        );
+        $this->assertSame(null, $opts->apiKey);
+        $this->assertSame(array('Locale' => 'ja'), $opts->headers);
+    }
+
     public function testKeyArray()
     {
         $opts = Util\RequestOptions::parse(
