@@ -67,6 +67,9 @@ class RequestOptions
             if (array_key_exists('payjp_version', $options)) {
                 $headers['Payjp-Version'] = $options['payjp_version'];
             }
+            if (array_key_exists('locale', $options)) {
+                $headers['Locale'] = $options['locale'];
+            }
             return new RequestOptions($key, $headers);
         }
 
