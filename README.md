@@ -42,7 +42,7 @@ Simple usage looks like:
 ## Documentation
 
 - [Request Example](https://github.com/payjp/payjp-php/blob/master/RequestExample.md)
-- Please see our official [documentation](http://docs.pay.jp).
+- Please see our official [documentation](https://pay.jp/docs/started).
 
 ## Tests
 
