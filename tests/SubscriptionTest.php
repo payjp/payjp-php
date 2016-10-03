@@ -64,7 +64,7 @@ class SubscriptionTest extends TestCase
         } catch (Error\InvalidRequest $e) {
             $actual = $e->getJsonBody();
 
-            $this->assertSame('Parameters are not allowed: /v1/subscriptions/'.$sub->id.'/cancel', $actual['error']['message']);
+            $this->assertSame('Invalid param key to subscription.', $actual['error']['message']);
         }
 
         $sub->cancel();
