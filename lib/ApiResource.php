@@ -2,7 +2,7 @@
 
 namespace Payjp;
 
-abstract class ApiResource extends Object
+abstract class ApiResource extends PayjpObject
 {
     private static $HEADERS_TO_PERSIST = array('Payjp-Account' => true, 'Payjp-Version' => true);
 

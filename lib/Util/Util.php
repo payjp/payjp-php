@@ -2,7 +2,7 @@
 
 namespace Payjp\Util;
 
-use Payjp\Object;
+use Payjp\PayjpObject;
 
 abstract class Util
 {
@@ -41,7 +41,7 @@ abstract class Util
             if ($k[0] == '_') {
                 continue;
             }
-            if ($v instanceof Object) {
+            if ($v instanceof PayjpObject) {
                 $results[$k] = $v->__toArray(true);
             } elseif (is_array($v)) {
                 $results[$k] = self::convertPayjpObjectToArray($v);
@@ -83,7 +83,7 @@ abstract class Util
             if (isset($resp['object']) && is_string($resp['object']) && isset($types[$resp['object']])) {
                 $class = $types[$resp['object']];
             } else {
-                $class = 'Payjp\\Object';
+                $class = 'Payjp\\PayjpObject';
             }
             return $class::constructFrom($resp, $opts);
         } else {

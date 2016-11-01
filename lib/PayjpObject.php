@@ -5,7 +5,7 @@ namespace Payjp;
 use ArrayAccess;
 use InvalidArgumentException;
 
-class Object implements ArrayAccess
+class PayjpObject implements ArrayAccess
 {
     /**
      * @var Util\Set Attributes that should not be sent to the API because
@@ -252,4 +252,4 @@ class Object implements ArrayAccess
     }
 }
 
-Object::init();
+PayjpObject::init();

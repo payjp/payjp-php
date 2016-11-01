@@ -2,11 +2,11 @@
 
 namespace Payjp;
 
-class ObjectTest extends TestCase
+class PayjpObjectTest extends TestCase
 {
     public function testArrayAccessorsSemantics()
     {
-        $s = new Object();
+        $s = new PayjpObject();
         $s['foo'] = 'a';
         $this->assertSame($s['foo'], 'a');
         $this->assertTrue(isset($s['foo']));
@@ -16,7 +16,7 @@ class ObjectTest extends TestCase
 
     public function testNormalAccessorsSemantics()
     {
-        $s = new Object();
+        $s = new PayjpObject();
         $s->foo = 'a';
         $this->assertSame($s->foo, 'a');
         $this->assertTrue(isset($s->foo));
@@ -26,7 +26,7 @@ class ObjectTest extends TestCase
 
     public function testArrayAccessorsMatchNormalAccessors()
     {
-        $s = new Object();
+        $s = new PayjpObject();
         $s->foo = 'a';
         $this->assertSame($s['foo'], 'a');
 
@@ -36,14 +36,14 @@ class ObjectTest extends TestCase
 
     public function testKeys()
     {
-        $s = new Object();
+        $s = new PayjpObject();
         $s->foo = 'a';
         $this->assertSame($s->keys(), array('foo'));
     }
 
     public function testToArray()
     {
-        $s = new Object();
+        $s = new PayjpObject();
         $s->foo = 'a';
 
         $converted = $s->__toArray();
@@ -55,8 +55,8 @@ class ObjectTest extends TestCase
 
     public function testRecursiveToArray()
     {
-        $s = new Object();
-        $z = new Object();
+        $s = new PayjpObject();
+        $z = new PayjpObject();
 
         $s->child = $z;
         $z->foo = 'a';
