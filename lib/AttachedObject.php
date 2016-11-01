@@ -3,7 +3,7 @@
 namespace Payjp;
 
 // e.g. metadata on Payjp objects.
-class AttachedObject extends Object
+class AttachedObject extends PayjpObject
 {
     /**
      * Updates this object.
