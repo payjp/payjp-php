@@ -16,7 +16,7 @@ class Payjp
     // @var boolean Defaults to true.
     public static $verifySslCerts = true;
 
-    const VERSION = '0.0.2';
+    const VERSION = '0.0.6';
 
     /**
      * @return string The API key used for requests.
