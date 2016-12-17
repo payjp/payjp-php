@@ -61,7 +61,7 @@
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Customer::create(array(
-			"descriptuon" => "test"
+			"description" => "test"
 	));
 
 ###get顧客情報を取得
