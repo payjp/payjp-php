@@ -64,7 +64,7 @@ class SubscriptionTest extends TestCase
         } catch (Error\InvalidRequest $e) {
             $actual = $e->getJsonBody();
 
-            $this->assertSame('Invalid param key to subscription.', $actual['error']['message']);
+            $this->assertSame('Invalid param key to subscription', $actual['error']['message']);
         }
 
         $sub->cancel();
