@@ -66,6 +66,19 @@ class CurlClient implements ClientInterface
         }
 
         $errno = curl_errno($curl);
+        if ($errno == CURLE_SSL_CACERT ||
+            $errno == CURLE_SSL_PEER_CERTIFICATE ||
+            $errno == CURLE_SSL_CACERT_BADFILE
+        ) {
+            array_push(
+                $headers,
+                'X-Payjp-Client-Info: {"ca":"using Payjp-supplied CA bundle"}'
+            );
+            $cert = self::caBundle();
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($curl, CURLOPT_CAINFO, $cert);
+            $rbody = curl_exec($curl);
+        }
 
         if ($rbody === false) {
             $errno = curl_errno($curl);
@@ -108,6 +121,11 @@ class CurlClient implements ClientInterface
 
         $msg .= "\n\n(Network error [errno $errno]: $message)";
         throw new Error\ApiConnection($msg);
+    }
+
+    private static function caBundle()
+    {
+        return dirname(__FILE__) . '/../../data/ca-certificates.crt';
     }
 
     /**
