@@ -12,7 +12,7 @@ You can install the bindings via [Composer](http://getcomposer.org/). Add this t
 
     {
       "require": {
-        "payjp/payjp-php": "0.0.x"
+        "payjp/payjp-php": "~1.0"
       }
     }
 
