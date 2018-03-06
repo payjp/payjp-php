@@ -1,9 +1,9 @@
-#Payjp-php Request Example
+# Payjp-php Request Example
 
 
-##支払い(Charges)
+## 支払い(Charges)
 
-###post支払いを作成
+### post支払いを作成
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$card = array(
@@ -19,13 +19,13 @@
 	));
 
 
-###get支払い情報を取得
+### get支払い情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Charge::retrieve("ch_fa990a4c10672a93053a774730b0a");
 
-###post支払い情報を更新
+### post支払い情報を更新
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -33,30 +33,30 @@
 	$ch->description = "Updated";
 	$ch->save();
 
-###post返金する
+### post返金する
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$ch = \Payjp\Charge::retrieve("ch_fa990a4c10672a93053a774730b0a");
 	$ch->refund();
 
-###post支払い処理を確定する
+### post支払い処理を確定する
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$ch = \Payjp\Charge::retrieve("ch_fa990a4c10672a93053a774730b0a");
 	$ch->capture();
 
-###get支払いリストを取得
+### get支払いリストを取得
 	
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Charge::all(array("limit" => 3, "offset" => 10));
 
 
-##顧客 (CUSTOMERS)
+## 顧客 (CUSTOMERS)
 
-###post顧客を作成
+### post顧客を作成
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -64,13 +64,13 @@
 			"description" => "test"
 	));
 
-###get顧客情報を取得
+### get顧客情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Customer::retrieve("cus_121673955bd7aa144de5a8f6c262");
 
-###post顧客情報を更新
+### post顧客情報を更新
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -78,20 +78,20 @@
 	$cu->email = "added@email.com";
 	$cu->save();
 
-###delete顧客を削除
+### delete顧客を削除
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$cu = \Payjp\Customer::retrieve("cus_121673955bd7aa144de5a8f6c262");
 	$cu->delete();
 
-###get顧客リストを取得
+### get顧客リストを取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Customer::all(array("limit" => 3, "offset" => 10));
 
-###post顧客のカードを作成
+### post顧客のカードを作成
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -105,14 +105,14 @@
 	
 	$cu->cards->create($card);
 
-###get顧客のカード情報を取得
+### get顧客のカード情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$cu = \Payjp\Customer::retrieve("cus_4df4b5ed720933f4fb9e28857517");
 	$cu->cards->retrieve("car_f7d9fa98594dc7c2e42bfcd641ff");
 
-###post顧客のカードを更新
+### post顧客のカードを更新
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -122,7 +122,7 @@
 	$card->exp_month = "05";
 	$card->save();
 
-###delete顧客のカードを削除
+### delete顧客のカードを削除
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -130,29 +130,29 @@
 	$card = $cu->cards->retrieve("car_f7d9fa98594dc7c2e42bfcd641ff");
 	$card->delete();
 
-###get顧客のカードリストを取得
+### get顧客のカードリストを取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Customer::retrieve("cus_4df4b5ed720933f4fb9e28857517")->cards->all(array("limt"=>3, "offset"=>1));
 
-###get顧客の定期購入情報を取得
+### get顧客の定期購入情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$cu = \Payjp\Customer::retrieve("cus_4df4b5ed720933f4fb9e28857517");
 	$cu->subscription->retrieve("sub_567a1e44562932ec1a7682d746e0");
 
-###get顧客の定期購入リストを取得
+### get顧客の定期購入リストを取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Customer::retrieve("cus_4df4b5ed720933f4fb9e28857517")->subscription->all(array("limt"=>3));
 
 
-##プラン (PLANS)
+## プラン (PLANS)
 
-###postプランを作成
+### postプランを作成
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -163,13 +163,13 @@
 			"trial_days" => 30,
 	));
 
-###getプラン情報を取得
+### getプラン情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Plan::retrieve("pln_45dd3268a18b2837d52861716260");
 
-###postプランを更新
+### postプランを更新
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -177,23 +177,23 @@
 	$p->name = "NewPlan";
 	$p->save();
 
-###deleteプランを削除
+### deleteプランを削除
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$p = \Payjp\Plan::retrieve("pln_45dd3268a18b2837d52861716260");
 	$p->delete();
 
-###getプランリストを取得
+### getプランリストを取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Plan::all(array("limit" => 3));
 
 
-##定期購入 (SUBSCRIPTIONS)
+## 定期購入 (SUBSCRIPTIONS)
 
-###post定期購入を作成
+### post定期購入を作成
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -204,13 +204,13 @@
 			)
 	);
 
-###get定期購入情報を取得
+### get定期購入情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Subscription::retrieve("sub_567a1e44562932ec1a7682d746e0");
 
-###post定期購入を更新
+### post定期購入を更新
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -218,44 +218,44 @@
 	$su->plan = "pln_68e6a67f582462c223ca693bc549";
 	$su->save();
 
-###post定期購入を停止
+### post定期購入を停止
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$su = \Payjp\Subscription::retrieve("sub_567a1e44562932ec1a7682d746e0");
 	$su->pause();
 
-###post定期購入を再開
+### post定期購入を再開
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$su = \Payjp\Subscription::retrieve("sub_567a1e44562932ec1a7682d746e0");
 	$su->resume();
 
-###post定期購入をキャンセル
+### post定期購入をキャンセル
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$su = \Payjp\Subscription::retrieve("sub_567a1e44562932ec1a7682d746e0");
 	$su->cancel();
 
-###delete定期購入を削除
+### delete定期購入を削除
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	$su = \Payjp\Subscription::retrieve("sub_567a1e44562932ec1a7682d746e0");
 	$su->delete();
 
-###get定期購入のリストを取得
+### get定期購入のリストを取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Subscription::all(array("limit" => 3));
 
 
-##トークン (TOKENS)
+## トークン (TOKENS)
 
-###postトークンを作成
+### postトークンを作成
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
@@ -271,52 +271,52 @@
 	));
 
 
-###getトークン情報を取得
+### getトークン情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Token::retrieve("tok_eff34b780cbebd61e87f09ecc9c6");
 
 
-##入金 (TRANSFERS)
+## 入金 (TRANSFERS)
 
-###get入金情報を取得
+### get入金情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Transfer::retrieve("tr_8f0c0fe2c9f8a47f9d18f03959ba1");
 
-###get入金リストを取得
+### get入金リストを取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Transfer::all(array("limit" => 3));
 
-###get入金の内訳を取得
+### get入金の内訳を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Transfer::retrieve("tr_8f0c0fe2c9f8a47f9d18f03959ba1")->charges->all(array("limt"=>3));
 
 
-##イベント (EVENTS)
+## イベント (EVENTS)
 
-###getイベント情報を取得
+### getイベント情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Event::retrieve("evnt_2f7436fe0017098bc8d22221d1e");
 
-###getイベントリストを取得
+### getイベントリストを取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
 	\Payjp\Event::all(array("limt"=>3, "offset"=>10));
 
 
-##アカウント (ACCOUNTS)
+## アカウント (ACCOUNTS)
 
-###getアカウント情報を取得
+### getアカウント情報を取得
 
 	\Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 	
