@@ -1,36 +1,26 @@
 {
   "name": "payjp/payjp-php",
-  "description": "Payjp PHP Library",
-  "keywords": [
-    "payjp",
-    "payment processing",
-    "api"
-  ],
-  "homepage": "https://pay.jp/",
+  "require": {
+    "php": ">= 5.6.0",
+    "guzzlehttp/guzzle": "6.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.*",
+    "phake/phake": "2.*"
+  },
+  "description": "PAY.JP PHP binding",
   "license": "MIT",
+  "version": "2.0.0",
   "authors": [
     {
-      "name": "Payjp and contributors",
+      "name": "PAY.JP and contributors",
       "homepage": "https://github.com/payjp/payjp-php/graphs/contributors"
     }
   ],
-  "require": {
-    "php": ">=5.3.3",
-    "ext-curl": "*",
-    "ext-json": "*",
-    "ext-mbstring": "*"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "~4.0",
-    "satooshi/php-coveralls": "~0.6.1",
-    "squizlabs/php_codesniffer": "~2.0"
-  },
+  "homepage": "https://github.com/payjp/payjp-php",
   "autoload": {
-    "psr-4": { "Payjp\\" : "lib/" }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.1.*-dev"
+    "psr-4": {
+      "Payjp\\": "src/"
     }
   }
 }
