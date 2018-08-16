@@ -70,6 +70,9 @@ class RequestOptions
             if (array_key_exists('locale', $options)) {
                 $headers['Locale'] = $options['locale'];
             }
+            if (array_key_exists('payjp_direct_token_generate', $options)) {
+                $headers['X-Payjp-Direct-Token-Generate'] = $options['payjp_direct_token_generate'];
+            }
             return new RequestOptions($key, $headers);
         }
 
