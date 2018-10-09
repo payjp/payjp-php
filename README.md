@@ -4,7 +4,7 @@
 
 ## Requirements
 
-PHP 5.3.3 and later.
+PHP 5.6 and later.
 
 ## Composer
 
