@@ -4,7 +4,10 @@
 
 ## Requirements
 
-PHP 5.3.3 and later.
+PHP 5.6 and later.
+
+> Even if it is not a corresponding version, it may work, but it does not support it.
+  Due to the PHP [END OF LIFE](http://php.net/supported-versions.php) cycle. 
 
 ## Composer
 
