@@ -3,18 +3,6 @@
 
 ## 支払い(Charges)
 
-### テストモードでTokenを発行する
-    \Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
-
-    $params = [
-        'card' => [
-            "number" => "4242424242424242",
-            "exp_month" => "12",
-            "exp_year" => "2020",
-        ]
-    ];
-    \Payjp\Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
-
 
 ### post支払いを作成
     \Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
@@ -268,21 +256,20 @@
 
 ## トークン (TOKENS)
 
-### postトークンを作成
+### テストモードでTokenを発行する
 
     \Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 
-    $card = array(
+    $params = [
+        'card' => [
             "number" => "4242424242424242",
-            "cvc" => "1234",
-            "exp_month" => "02",
-            "exp_year" =>"2020"
-    );
+            "exp_month" => "12",
+            "exp_year" => "2020",
+        ]
+    ];
 
-    \Payjp\Token::create(array(
-            "card" => $card
-    ));
-
+    \Payjp\Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+    
 
 ### getトークン情報を取得
 
