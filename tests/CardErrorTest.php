@@ -21,7 +21,7 @@ class CardErrorTest extends TestCase
 
         $charge = array(
             'amount' => 100,
-            'currency' => 'usd',
+            'currency' => self::CURRENCY,
             'card' => $card
         );
 
