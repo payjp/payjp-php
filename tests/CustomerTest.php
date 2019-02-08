@@ -126,22 +126,27 @@ class CustomerTest extends TestCase
         
         $defaultCard = $customer->cards->data[0];
 
-        $token = Token::create(
-            array("card" => array(
-                "number" => "4242424242424242",
-                "exp_month" => 6,
-                "exp_year" => date('Y') + 3,
-                "cvc" => "314"
-            ))
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $token = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
          
-        $card = array(
-                        "number" => "4242424242424242",
-                        "exp_month" => 7,
-                        "exp_year" => date('Y') + 3,
-                        "cvc" => "314"
-        );
-        
+        $params2 =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 10,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params2, $options = ['payjp_direct_token_generate' => 'true']);        
         $createdCard = $customer->cards->create(array("card" => $token->id));
         $createdCard_2 = $customer->cards->create($card);
         
@@ -185,14 +190,16 @@ class CustomerTest extends TestCase
     
     public function testCustomerDeleteCard()
     {
-        $token = Token::create(
-            array("card" => array(
-                "number" => "4242424242424242",
-                "exp_month" => 6,
-                "exp_year" => date('Y') + 3,
-                "cvc" => "314"
-            ))
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $token = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
     
         $customer = $this->createTestCustomer();
         $createdCard = $customer->cards->create(array("card" => $token->id));

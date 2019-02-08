@@ -14,29 +14,33 @@ class TokenTest extends TestCase
     public function testCreate()
     {
         self::authorizeFromEnv();
+    
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
         
-        $token = Token::create(
-            array("card" => array(
-                      "number" => "4242424242424242",
-                      "exp_month" => 6,
-                      "exp_year" => date('Y') + 3,
-                      "cvc" => "314"
-            ))
-        );
+        $token = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
     }
     
     public function testRetrieve()
     {
         self::authorizeFromEnv();
-         
-        $token = Token::create(
-            array("card" => array(
-                "number" => "4242424242424242",
-                "exp_month" => 6,
-                "exp_year" => date('Y') + 3,
-                "cvc" => "314"
-            ))
-        );
+
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+        
+        $token = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
          
         $token_retrieve = Token::retrieve($token->id);
         
