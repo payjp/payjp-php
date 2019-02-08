@@ -57,16 +57,23 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         self::authorizeFromEnv();
 
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+
         return Charge::create(
             $attributes + array(
                 'amount' => 2000,
                 'currency' => self::CURRENCY,
                 'description' => 'Charge for test@example.com',
-                'card' => array(
-                    'number' => '4242424242424242',
-                    'exp_month' => 5,
-                    'exp_year' => date('Y') + 3,
-                ),
+                'card' => $card
             )
         );
     }
@@ -97,13 +104,20 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         self::authorizeFromEnv();
 
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+
         return Customer::create(
             $attributes + array(
-                'card' => array(
-                    'number' => '4242424242424242',
-                    'exp_month' => 5,
-                    'exp_year' => date('Y') + 3,
-                ),
+                'card' => $card
             )
         );
     }
