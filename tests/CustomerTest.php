@@ -149,7 +149,7 @@ class CustomerTest extends TestCase
         $card = Token::create($params2, $options = ['payjp_direct_token_generate' => 'true']);
         
         $createdCard = $customer->cards->create(array("card" => $token->id));
-        $createdCard_2 = $customer->cards->create($card);
+        $createdCard_2 = $customer->cards->create(array("card" => $card->id));
         
         $updatedCustomer = Customer::retrieve($customer->id);
         $cardList = $updatedCustomer->cards->all();
