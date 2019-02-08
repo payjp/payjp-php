@@ -16,11 +16,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-            'number' => '4242424242424242',
-            'exp_month' => "05",
-            'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $c = Charge::create(
             array(
@@ -38,11 +43,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-            'number' => '4242424242424242',
-            'exp_month' => 5,
-            'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $c = Charge::create(
             array(
@@ -64,11 +74,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-            'number' => '4242424242424242',
-            'exp_month' => 5,
-            'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $c = Charge::create(
             array(
@@ -139,11 +154,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424242',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $charge = Charge::create(
             array(
@@ -166,11 +186,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424242',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $charge = Charge::create(
             array(
@@ -193,11 +218,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424242',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $charge = Charge::create(
             array(
@@ -220,11 +250,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424242',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $charge = Charge::create(
             array(
@@ -271,11 +306,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424241',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         Charge::create(
             array(
@@ -290,12 +330,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000002',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
 
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         try {
             Charge::create(
@@ -318,12 +362,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000066',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
 
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         try {
             Charge::create(
@@ -346,12 +394,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000890',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1).""
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
 
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         try {
             Charge::create(
@@ -374,12 +426,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000123',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1).""
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
 
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         try {
             Charge::create(
@@ -402,13 +458,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000070',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1) .""
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
 
-
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $ch = Charge::create(
             array(
@@ -425,13 +484,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000100',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1) .""
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
 
-
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $ch = Charge::create(
             array(
@@ -448,11 +510,16 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000150',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1) .""
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 6,
+            "exp_year" => date('Y') + 3,
+            "cvc" => "314"
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $ch = Charge::create(
             array(
