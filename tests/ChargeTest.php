@@ -186,7 +186,7 @@ class ChargeTest extends TestCase
             'card' => [
             "number" => "4242424242424242",
             "exp_month" => 5,
-            "exp_year" => date('Y') + 1,
+            "exp_year" => date('Y') + 1
             ]
         ];
 
@@ -388,7 +388,7 @@ class ChargeTest extends TestCase
             'card' => [
             "number" => "4000000000000890",
             "exp_month" => '05',
-            'exp_year' => (date('Y') + 1).""
+            'exp_year' => (date('Y') + 1)
             ]
         ];
 
@@ -419,7 +419,7 @@ class ChargeTest extends TestCase
             'card' => [
             "number" => "4000000000000123",
             "exp_month" => '05',
-            'exp_year' => (date('Y') + 1).""
+            'exp_year' => (date('Y') + 1)
             ]
         ];
 
@@ -450,7 +450,7 @@ class ChargeTest extends TestCase
             'card' => [
             "number" => "4000000000000070",
             "exp_month" => '05',
-            'exp_year' => (date('Y') + 1) .""
+            'exp_year' => (date('Y') + 1)
             ]
         ];
 
@@ -475,7 +475,7 @@ class ChargeTest extends TestCase
             'card' => [
             "number" => "4000000000000100",
             "exp_month" => '05',
-            'exp_year' => (date('Y') + 1) .""
+            'exp_year' => (date('Y') + 1)
             ]
         ];
 
@@ -500,7 +500,7 @@ class ChargeTest extends TestCase
             'card' => [
             "number" => "4000000000000150",
             "exp_month" => '05',
-            'exp_year' => (date('Y') + 1) .""
+            'exp_year' => (date('Y') + 1)
             ]
         ];
 
