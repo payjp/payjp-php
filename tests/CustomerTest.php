@@ -129,7 +129,7 @@ class CustomerTest extends TestCase
         $params =  [
             'card' => [
             "number" => "4242424242424242",
-            "exp_month" => 6,
+            "exp_month" => 12,
             "exp_year" => date('Y') + 3,
             "cvc" => "314"
             ]
