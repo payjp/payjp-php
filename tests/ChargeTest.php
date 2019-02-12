@@ -30,7 +30,7 @@ class ChargeTest extends TestCase
             array(
                 'amount' => 100,
                 'currency' => self::CURRENCY,
-                'card' => $card
+                'card' => $card->id
             )
         );
         $this->assertTrue($c->paid);
@@ -56,7 +56,7 @@ class ChargeTest extends TestCase
             array(
                 'amount' => 100,
                 'currency' => self::CURRENCY,
-                'card' => $card
+                'card' => $card->id
             ),
             array(
                 'idempotency_key' => self::generateRandomString(),
@@ -86,7 +86,7 @@ class ChargeTest extends TestCase
             array(
                 'amount' => 100,
                 'currency' => self::CURRENCY,
-                'card' => $card
+                'card' => $card->id
             )
         );
         $d = Charge::retrieve($c->id);
@@ -165,7 +165,7 @@ class ChargeTest extends TestCase
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
 
@@ -196,7 +196,7 @@ class ChargeTest extends TestCase
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card,
+                    'card' => $card->id,
                     'capture' => false
             )
         );
@@ -227,7 +227,7 @@ class ChargeTest extends TestCase
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card,
+                    'card' => $card->id,
                     'capture' => false
             )
         );
@@ -258,7 +258,7 @@ class ChargeTest extends TestCase
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card,
+                    'card' => $card->id,
             )
         );
 
@@ -313,7 +313,7 @@ class ChargeTest extends TestCase
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
     }
@@ -337,7 +337,7 @@ class ChargeTest extends TestCase
                 array(
                         'amount' => 100,
                         'currency' => self::CURRENCY,
-                        'card' => $card
+                        'card' => $card->id
                 )
             );
         } catch (Error\Card $e) {
@@ -368,7 +368,7 @@ class ChargeTest extends TestCase
                 array(
                         'amount' => 100,
                         'currency' => self::CURRENCY,
-                        'card' => $card
+                        'card' => $card->id
                 )
             );
         } catch (Error\Card $e) {
@@ -399,7 +399,7 @@ class ChargeTest extends TestCase
                 array(
                         'amount' => 100,
                         'currency' => self::CURRENCY,
-                        'card' => $card
+                        'card' => $card->id
                 )
             );
         } catch (Error\Card $e) {
@@ -430,7 +430,7 @@ class ChargeTest extends TestCase
                 array(
                         'amount' => 100,
                         'currency' => self::CURRENCY,
-                        'card' => $card
+                        'card' => $card->id
                 )
             );
         } catch (Error\Card $e) {
@@ -460,7 +460,7 @@ class ChargeTest extends TestCase
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
 
@@ -485,7 +485,7 @@ class ChargeTest extends TestCase
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
 
@@ -510,7 +510,7 @@ class ChargeTest extends TestCase
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
 
