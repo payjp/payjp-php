@@ -16,17 +16,21 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-            'number' => '4242424242424242',
-            'exp_month' => "05",
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => "05",
             'exp_year' => date('Y') + 1
-        );
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $c = Charge::create(
             array(
                 'amount' => 100,
                 'currency' => self::CURRENCY,
-                'card' => $card
+                'card' => $card->id
             )
         );
         $this->assertTrue($c->paid);
@@ -38,17 +42,21 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-            'number' => '4242424242424242',
-            'exp_month' => 5,
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 5,
             'exp_year' => date('Y') + 1
-        );
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $c = Charge::create(
             array(
                 'amount' => 100,
                 'currency' => self::CURRENCY,
-                'card' => $card
+                'card' => $card->id
             ),
             array(
                 'idempotency_key' => self::generateRandomString(),
@@ -64,17 +72,21 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-            'number' => '4242424242424242',
-            'exp_month' => 5,
-            'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 5,
+            "exp_year" => date('Y') + 1
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $c = Charge::create(
             array(
                 'amount' => 100,
                 'currency' => self::CURRENCY,
-                'card' => $card
+                'card' => $card->id
             )
         );
         $d = Charge::retrieve($c->id);
@@ -139,17 +151,21 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424242',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 5,
+            "exp_year" => date('Y') + 1
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $charge = Charge::create(
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
 
@@ -166,17 +182,21 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424242',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 5,
+            "exp_year" => date('Y') + 1
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $charge = Charge::create(
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card,
+                    'card' => $card->id,
                     'capture' => false
             )
         );
@@ -193,17 +213,21 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424242',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 5,
+            "exp_year" => date('Y') + 1
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $charge = Charge::create(
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card,
+                    'card' => $card->id,
                     'capture' => false
             )
         );
@@ -220,17 +244,21 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424242',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424242",
+            "exp_month" => 5,
+            "exp_year" => date('Y') + 1
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $charge = Charge::create(
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card,
+                    'card' => $card->id,
             )
         );
 
@@ -271,150 +299,45 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4242424242424241',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
+        $params =  [
+            'card' => [
+            "number" => "4242424242424241",
+            "exp_month" => 5,
+            "exp_year" => date('Y') + 1
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         Charge::create(
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
     }
 
-    public function testDeclinedCard()
-    {
-        self::authorizeFromEnv();
-
-        $card = array(
-                'number' => '4000000000000002',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
-
-
-        try {
-            Charge::create(
-                array(
-                        'amount' => 100,
-                        'currency' => self::CURRENCY,
-                        'card' => $card
-                )
-            );
-        } catch (Error\Card $e) {
-            $actual = $e->getJsonBody();
-
-            $this->assertSame(402, $e->getHttpStatus());
-            $this->assertSame('card_error', $actual['error']['type']);
-            $this->assertSame('card_declined', $actual['error']['code']);
-        }
-    }
-
-    public function testExpiredNumber()
-    {
-        self::authorizeFromEnv();
-
-        $card = array(
-                'number' => '4000000000000066',
-                'exp_month' => 5,
-                'exp_year' => date('Y') + 1
-        );
-
-
-        try {
-            Charge::create(
-                array(
-                        'amount' => 100,
-                        'currency' => self::CURRENCY,
-                        'card' => $card
-                )
-            );
-        } catch (Error\Card $e) {
-            $actual = $e->getJsonBody();
-
-            $this->assertSame(402, $e->getHttpStatus());
-            $this->assertSame('card_error', $actual['error']['type']);
-            $this->assertSame('expired_card', $actual['error']['code']);
-        }
-    }
-
-    public function testIncorrectCvcNumber()
-    {
-        self::authorizeFromEnv();
-
-        $card = array(
-                'number' => '4000000000000890',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1).""
-        );
-
-
-        try {
-            Charge::create(
-                array(
-                        'amount' => 100,
-                        'currency' => self::CURRENCY,
-                        'card' => $card
-                )
-            );
-        } catch (Error\Card $e) {
-            $actual = $e->getJsonBody();
-
-            $this->assertSame(402, $e->getHttpStatus());
-            $this->assertSame('card_error', $actual['error']['type']);
-            $this->assertSame('invalid_cvc', $actual['error']['code']);
-        }
-    }
-
-    public function testProceErrorNumber()
-    {
-        self::authorizeFromEnv();
-
-        $card = array(
-                'number' => '4000000000000123',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1).""
-        );
-
-
-        try {
-            Charge::create(
-                array(
-                        'amount' => 100,
-                        'currency' => self::CURRENCY,
-                        'card' => $card
-                )
-            );
-        } catch (Error\Card $e) {
-            $actual = $e->getJsonBody();
-
-            $this->assertSame(402, $e->getHttpStatus());
-            $this->assertSame('card_error', $actual['error']['type']);
-            $this->assertSame('processing_error', $actual['error']['code']);
-        }
-    }
 
     public function testInvalidAddressZipTest()
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000070',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1) .""
-        );
+        $params =  [
+            'card' => [
+            "number" => "4000000000000070",
+            "exp_month" => '05',
+            'exp_year' => (date('Y') + 1)
+            ]
+        ];
 
-
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $ch = Charge::create(
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
 
@@ -425,19 +348,21 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000100',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1) .""
-        );
+        $params =  [
+            'card' => [
+            "number" => "4000000000000100",
+            "exp_month" => '05',
+            'exp_year' => (date('Y') + 1)
+            ]
+        ];
 
-
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $ch = Charge::create(
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
 
@@ -448,17 +373,21 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $card = array(
-                'number' => '4000000000000150',
-                'exp_month' => '05',
-                'exp_year' => (date('Y') + 1) .""
-        );
+        $params =  [
+            'card' => [
+            "number" => "4000000000000150",
+            "exp_month" => '05',
+            'exp_year' => (date('Y') + 1)
+            ]
+        ];
+
+        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         $ch = Charge::create(
             array(
                     'amount' => 100,
                     'currency' => self::CURRENCY,
-                    'card' => $card
+                    'card' => $card->id
             )
         );
 
