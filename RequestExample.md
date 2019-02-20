@@ -135,7 +135,7 @@
 
     \Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 
-    \Payjp\Customer::retrieve("cus_4df4b5ed720933f4fb9e28857517")->cards->all(array("limt"=>3, "offset"=>1));
+    \Payjp\Customer::retrieve("cus_4df4b5ed720933f4fb9e28857517")->cards->all(array("limit"=>3, "offset"=>1));
 
 ### get顧客の定期購入情報を取得
 
@@ -148,7 +148,7 @@
 
     \Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 
-    \Payjp\Customer::retrieve("cus_4df4b5ed720933f4fb9e28857517")->subscription->all(array("limt"=>3));
+    \Payjp\Customer::retrieve("cus_4df4b5ed720933f4fb9e28857517")->subscription->all(array("limit"=>3));
 
 
 ## プラン (PLANS)
@@ -296,7 +296,7 @@
 
     \Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 
-    \Payjp\Transfer::retrieve("tr_8f0c0fe2c9f8a47f9d18f03959ba1")->charges->all(array("limt"=>3));
+    \Payjp\Transfer::retrieve("tr_8f0c0fe2c9f8a47f9d18f03959ba1")->charges->all(array("limit"=>3));
 
 
 ## イベント (EVENTS)
@@ -311,7 +311,7 @@
 
     \Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 
-    \Payjp\Event::all(array("limt"=>3, "offset"=>10));
+    \Payjp\Event::all(array("limit"=>3, "offset"=>10));
 
 
 ## アカウント (ACCOUNTS)
