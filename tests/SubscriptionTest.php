@@ -9,6 +9,8 @@ class SubscriptionTest extends TestCase
     {
         $planID = 'gold-' . self::randomString();
         self::retrieveOrCreatePlan($planID);
+        $nextPlanID = 'next-plan-for-sdk-test';
+        self::retrieveOrCreatePlan($nextPlanID);
 
         $customer = self::createTestCustomer();
 
@@ -20,8 +22,16 @@ class SubscriptionTest extends TestCase
         );
 
         $this->assertSame($sub->status, 'active');
+        $this->assertSame($sub->next_cycle_plan, null);
         $this->assertSame($sub->trial_end, null);
         $this->assertSame($sub->plan->id, $planID);
+
+        $sub->next_cycle_plan = $nextPlanID;
+        $sub->save();
+        $this->assertSame($sub->next_cycle_plan->id, $nextPlanID);
+        $sub->next_cycle_plan = null;
+        $sub->save();
+        $this->assertSame($sub->next_cycle_plan, null);
 
         $sub_retrieve = Subscription::retrieve($sub->id);
 
