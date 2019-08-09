@@ -35,12 +35,17 @@ If you do not wish to use Composer, you can download the [latest release](https:
 
 ## Getting Started
 
-Simple usage looks like:
+In advance, you need to get a token by [Checkout](https://pay.jp/docs/checkout) or [payjp.js](https://pay.jp/docs/payjs).
 
-    \Payjp\Payjp::setApiKey('sk_test_c62fade9d045b54cd76d7036');
-    $myCard = array('number' => '4242424242424242', 'exp_month' => 5, 'exp_year' => 2020);
-    $charge = \Payjp\Charge::create(array('card' => $myCard, 'amount' => 2000, 'currency' => 'jpy'));
-    echo $charge;
+```php
+\Payjp\Payjp::setApiKey('sk_test_c62fade9d045b54cd76d7036');
+$charge = \Payjp\Charge::create(array(
+  'card' => 'token_id_by_Checkout_or_payjp-js',
+  'amount' => 2000,
+  'currency' => 'jpy'
+));
+echo $charge->amount; // 2000
+```
 
 ## Documentation
 
