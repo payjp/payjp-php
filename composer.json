@@ -21,8 +21,7 @@
     "ext-mbstring": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.0",
-    "satooshi/php-coveralls": "~0.6.1",
+    "phpunit/phpunit": "~5.7",
     "squizlabs/php_codesniffer": "~2.0"
   },
   "autoload": {
@@ -32,5 +31,11 @@
     "branch-alias": {
       "dev-master": "0.1.*-dev"
     }
+  },
+  "scripts": {
+     "test": [
+       "phpcs --standard=PSR2 -n lib tests *.php",
+       "phpunit"
+     ]
   }
 }

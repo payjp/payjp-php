@@ -30,6 +30,7 @@ require(dirname(__FILE__) . '/lib/ExternalAccount.php');
 
 // Payjp API Resources
 require(dirname(__FILE__) . '/lib/Account.php');
+require(dirname(__FILE__) . '/lib/ApplicationUrl.php');
 require(dirname(__FILE__) . '/lib/Card.php');
 require(dirname(__FILE__) . '/lib/Charge.php');
 require(dirname(__FILE__) . '/lib/Collection.php');
@@ -39,3 +40,5 @@ require(dirname(__FILE__) . '/lib/Plan.php');
 require(dirname(__FILE__) . '/lib/Subscription.php');
 require(dirname(__FILE__) . '/lib/Token.php');
 require(dirname(__FILE__) . '/lib/Transfer.php');
+require(dirname(__FILE__) . '/lib/Tenant.php');
+require(dirname(__FILE__) . '/lib/TenantTransfer.php');

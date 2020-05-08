@@ -6,17 +6,12 @@ abstract class ApiResource extends PayjpObject
 {
     private static $HEADERS_TO_PERSIST = array('Payjp-Account' => true, 'Payjp-Version' => true);
 
-    public static function baseUrl()
-    {
-        return Payjp::$apiBase;
-    }
-
     /**
      * @return ApiResource The refreshed resource.
      */
     public function refresh()
     {
-        $requestor = new ApiRequestor($this->_opts->apiKey, static::baseUrl());
+        $requestor = new ApiRequestor($this->_opts->apiKey);
         $url = $this->instanceUrl();
 
         list($response, $this->_opts->apiKey) = $requestor->request(
@@ -92,6 +87,14 @@ abstract class ApiResource extends PayjpObject
         }
     }
 
+    /**
+     * @param string $method
+     * @param string $url
+     * @param array|null $params
+     * @param RequestOptions|array|string|null $options
+     *
+     * @return list(array, RequestOptions)
+     */
     protected function _request($method, $url, $params = array(), $options = null)
     {
         $opts = $this->_opts->merge($options);
@@ -101,7 +104,7 @@ abstract class ApiResource extends PayjpObject
     protected static function _staticRequest($method, $url, $params, $options)
     {
         $opts = Util\RequestOptions::parse($options);
-        $requestor = new ApiRequestor($opts->apiKey, static::baseUrl());
+        $requestor = new ApiRequestor($opts->apiKey);
         list($response, $opts->apiKey) = $requestor->request($method, $url, $params, $opts->headers);
         foreach ($opts->headers as $k => $v) {
             if (!array_key_exists($k, self::$HEADERS_TO_PERSIST)) {
@@ -131,7 +134,6 @@ abstract class ApiResource extends PayjpObject
     protected static function _create($params = null, $options = null)
     {
         self::_validateParams($params);
-        $base = static::baseUrl();
         $url = static::classUrl();
 
         list($response, $opts) = static::_staticRequest('post', $url, $params, $options);

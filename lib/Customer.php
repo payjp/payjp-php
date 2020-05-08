@@ -11,7 +11,7 @@ class Customer extends ApiResource
                 . "method calls.  (HINT: an example call to create a charge "
                 . "would be: \"Payjp\\Charge::create(array('amount' => 100, "
                 . "'currency' => 'usd', 'card' => array('number' => "
-                                                                                        . "4242424242424242, 'exp_month' => 5, 'exp_year' => 2015)))\")";
+                . "4242424242424242, 'exp_month' => 5, 'exp_year' => 2015)))\")";
                     throw new Error\Api($message);
         }
     }
