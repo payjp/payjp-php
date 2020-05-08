@@ -51,53 +51,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create a valid test charge.
-     */
-    protected static function createTestCharge(array $attributes = array())
-    {
-        self::authorizeFromEnv();
-
-        $params =  [
-            'card' => [
-            "number" => "4242424242424242",
-            "exp_month" => 6,
-            "exp_year" => date('Y') + 3,
-            "cvc" => "314"
-            ]
-        ];
-
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
-
-        return Charge::create(
-            $attributes + array(
-                'amount' => 2000,
-                'currency' => self::CURRENCY,
-                'description' => 'Charge for test@example.com',
-                'card' => $card
-            )
-        );
-    }
-
-    /**
-     * Create a valid test charge.
-     */
-    protected static function createTestTransfer(array $attributes = array())
-    {
-        self::authorizeFromEnv();
-
-        $recipient = self::createTestRecipient();
-
-        return Transfer::create(
-            $attributes + array(
-                'amount' => 2000,
-                'currency' => self::CURRENCY,
-                'description' => 'Transfer to test@example.com',
-                'recipient' => $recipient->id
-            )
-        );
-    }
-
-    /**
      * Create a valid test customer.
      */
     protected static function createTestCustomer(array $attributes = array())

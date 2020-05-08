@@ -6,6 +6,22 @@ use Payjp\PayjpObject;
 
 abstract class Util
 {
+    // todo wanna use 'private const' (only PHP >= v7.1.0)
+    private static $types = array(
+        'application_url' => 'Payjp\\ApplicationUrl',
+        'card' => 'Payjp\\Card',
+        'charge' => 'Payjp\\Charge',
+        'customer' => 'Payjp\\Customer',
+        'event' => 'Payjp\\Event',
+        'list' => 'Payjp\\Collection',
+        'plan' => 'Payjp\\Plan',
+        'subscription' => 'Payjp\\Subscription',
+        'tenant' => 'Payjp\\Tenant',
+        'token' => 'Payjp\\Token',
+        'tenant_transfer' => 'Payjp\\TenantTransfer',
+        'transfer' => 'Payjp\\Transfer',
+    );
+
     /**
      * Whether the provided array (or other) is a list rather than a dictionary.
      *
@@ -61,18 +77,6 @@ abstract class Util
      */
     public static function convertToPayjpObject($resp, $opts)
     {
-        $types = array(
-            'account' => 'Payjp\\Account',
-            'card' => 'Payjp\\Card',
-            'charge' => 'Payjp\\Charge',
-            'customer' => 'Payjp\\Customer',
-            'list' => 'Payjp\\Collection',
-            'event' => 'Payjp\\Event',
-            'token' => 'Payjp\\Token',
-            'transfer' => 'Payjp\\Transfer',
-            'plan' => 'Payjp\\Plan',
-            'subscription' => 'Payjp\\Subscription',
-        );
         if (self::isList($resp)) {
             $mapped = array();
             foreach ($resp as $i) {
@@ -80,8 +84,8 @@ abstract class Util
             }
             return $mapped;
         } elseif (is_array($resp)) {
-            if (isset($resp['object']) && is_string($resp['object']) && isset($types[$resp['object']])) {
-                $class = $types[$resp['object']];
+            if (isset($resp['object']) && is_string($resp['object']) && isset(self::$types[$resp['object']])) {
+                $class = self::$types[$resp['object']];
             } else {
                 $class = 'Payjp\\PayjpObject';
             }

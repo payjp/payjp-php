@@ -6,7 +6,7 @@ class Transfer extends ApiResource
 {
     /**
      * @param string $id The ID of the transfer to retrieve.
-     * @param array|string|null $opts
+     * @param RequestOptions|array|string|null $opts
      *
      * @return Transfer
      */
@@ -17,7 +17,7 @@ class Transfer extends ApiResource
 
     /**
      * @param array|null $params
-     * @param array|string|null $opts
+     * @param RequestOptions|array|string|null $opts
      *
      * @return Transfer[]
      */
