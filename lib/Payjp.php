@@ -16,6 +16,21 @@ class Payjp
     // @var boolean Defaults to true.
     public static $verifySslCerts = true;
 
+    // @var int Max retry count for over_capacity 429 response.
+    public static $maxRetry = 0;
+
+    /**
+     * The retry interval base value for over_capacity 429 response.
+     * Based on "Exponential backoff with equal jitter" algorithm.
+     * See https://aws.amazon.com/jp/blogs/architecture/exponential-backoff-and-jitter/
+     * 
+     * @var int 
+     */ 
+    public static $retryInitialDelay = 2;
+
+    // @var int Max retry delay seconds for over_capacity 429 response.
+    public static $retryMaxDelay = 32;
+
     const VERSION = '1.0.0';
 
     /**
@@ -68,4 +83,54 @@ class Payjp
     {
         self::$verifySslCerts = $verify;
     }
+
+    /**
+     * @return int
+     */
+    public static function getMaxRetry()
+    {
+        return self::$maxRetry;
+    }
+
+    /**
+     * @param int $value
+     */
+    public static function setMaxRetry($value)
+    {
+        self::$maxRetry = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getRetryInitialDelay()
+    {
+        return self::$retryInitialDelay;
+    }
+
+    /**
+     * @param int $value
+     */
+    public static function setRetryInitialDelay($value)
+    {
+        self::$retryInitialDelay = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getRetryMaxDelay()
+    {
+        return self::$retryMaxDelay;
+    }
+
+    /**
+     * @param int $value
+     */
+    public static function setRetryMaxDelay($value)
+    {
+        self::$retryMaxDelay = $value;
+    }
+
+
 }
