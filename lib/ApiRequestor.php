@@ -49,7 +49,8 @@ class ApiRequestor
     private function getRetryDelay($retryCount)
     {
         $wait = min(Payjp::getRetryMaxDelay(), Payjp::getRetryInitialDelay() * pow(2, $retryCount));
-        return $wait / 2 + random_int(0, $wait / 2);
+        $scale = pow(10, 2);
+        return $wait / 2 + random_int(0, $wait / 2 * $scale) / $scale;
     }
 
     /**
@@ -77,7 +78,7 @@ class ApiRequestor
             } elseif ($i != Payjp::getMaxRetry()){
                 $wait = $this->getRetryDelay($i);
                 error_log("Retry after {$wait} seconds.");
-                sleep($wait);
+                usleep($wait * 1000000);
             } else {
                 break;
             }

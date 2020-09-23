@@ -40,7 +40,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
                  ->willReturn(array(json_encode($return), 200));
     }
 
-    private function setUpMockRequest()
+    protected function setUpMockRequest()
     {
         if (!$this->mock) {
             self::authorizeFromEnv();
