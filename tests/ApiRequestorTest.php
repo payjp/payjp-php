@@ -37,7 +37,7 @@ class ApiRequestorTest extends TestCase
     private function setUpResponses($responses)
     {
         $mock = $this->setUpMockRequest();
-        for($i = 0; $i < count($responses); $i++){
+        for ($i = 0; $i < count($responses); $i++) {
             $mock->expects($this->at($i))
             ->method('request')
             ->willReturn(array(json_encode($responses[$i]['rbody']), $responses[$i]['rcode']));

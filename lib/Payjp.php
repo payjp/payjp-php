@@ -23,9 +23,9 @@ class Payjp
      * The retry interval base value for over_capacity 429 response.
      * Based on "Exponential backoff with equal jitter" algorithm.
      * See https://aws.amazon.com/jp/blogs/architecture/exponential-backoff-and-jitter/
-     * 
-     * @var int 
-     */ 
+     *
+     * @var int
+     */
     public static $retryInitialDelay = 2;
 
     // @var int Max retry delay seconds for over_capacity 429 response.
@@ -131,6 +131,4 @@ class Payjp
     {
         self::$retryMaxDelay = $value;
     }
-
-
 }
