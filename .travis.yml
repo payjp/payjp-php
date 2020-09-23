@@ -8,5 +8,6 @@ php:
 
 env:
   - AUTOLOAD=1
+  - MAX_RETRY=2
 
-script: ./build.php ${AUTOLOAD}
+script: ./build.php ${AUTOLOAD} ${MAX_RETRY}

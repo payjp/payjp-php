@@ -13,9 +13,11 @@ class ApiRequestorTest extends TestCase
         Payjp::setRetryMaxDelay(32);
     }
 
-    public static function tearDownAfterClass()
+    protected function tearDown()
     {
+        parent::tearDown();
         Payjp::setMaxRetry(0);
+        $this->setMaxRetryForCi();
         Payjp::setRetryInitialDelay(2);
         Payjp::setRetryMaxDelay(32);
     }
