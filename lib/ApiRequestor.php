@@ -50,7 +50,11 @@ class ApiRequestor
     {
         $wait = min(Payjp::getRetryMaxDelay(), Payjp::getRetryInitialDelay() * pow(2, $retryCount));
         $scale = pow(10, 2);
-        return $wait / 2 + random_int(0, $wait / 2 * $scale) / $scale;
+        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            return $wait / 2 + random_int(0, $wait / 2 * $scale) / $scale;
+        } else {
+            return $wait / 2 + mt_rand(0, $wait / 2 * $scale) / $scale;
+        }
     }
 
     /**
