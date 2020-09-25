@@ -130,7 +130,6 @@ class ApiRequestorTest extends TestCase
         $method->setAccessible(true);
         $r = new ApiRequestor(self::API_KEY);
 
-        $this->assertTrue(gettype($method->invoke($r, 0)) == 'double');
         $this->assertTrue(1 <= $method->invoke($r, 0) && $method->invoke($r, 0) <= 2);
         $this->assertTrue(2 <= $method->invoke($r, 1) && $method->invoke($r, 1) <= 4);
         $this->assertTrue(4 <= $method->invoke($r, 2) && $method->invoke($r, 2) <= 8);
