@@ -38,6 +38,9 @@ class ApiRequestor
         }
     }
 
+    // @var int Number of digit for randomized sleep time seconds
+    private $digit_num_for_rand = 2;
+
     /**
      * Based on "Exponential backoff with equal jitter" algorithm.
      * https://aws.amazon.com/jp/blogs/architecture/exponential-backoff-and-jitter/
@@ -48,13 +51,9 @@ class ApiRequestor
      */
     private function getRetryDelay($retryCount)
     {
-        $wait = min(Payjp::getRetryMaxDelay(), Payjp::getRetryInitialDelay() * pow(2, $retryCount));
-        $scale = pow(10, 2);
-        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            return $wait / 2 + random_int(0, $wait / 2 * $scale) / $scale;
-        } else {
-            return $wait / 2 + mt_rand(0, $wait / 2 * $scale) / $scale;
-        }
+        $wait_half = min(Payjp::getRetryMaxDelay(), Payjp::getRetryInitialDelay() * pow(2, $retryCount)) / 2;
+        $scale = pow(10, $this->digit_num_for_rand);
+        return $wait_half + mt_rand(0, $wait_half * $scale) / $scale;
     }
 
     /**
