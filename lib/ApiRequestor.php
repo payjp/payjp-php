@@ -76,9 +76,7 @@ class ApiRequestor
 
         for ($i = 0; $i <= Payjp::getMaxRetry(); $i++) {
             list($rbody, $rcode, $myApiKey) = $this->_requestRaw($method, $url, $params, $headers);
-            if ($rcode != 429) {
-                break;
-            } elseif ($i != Payjp::getMaxRetry()) {
+            if ($rcode == 429 && $i != Payjp::getMaxRetry()) {
                 $wait = $this->getRetryDelay($i);
                 error_log("Retry after {$wait} seconds.");
                 usleep($wait * 1000000);
