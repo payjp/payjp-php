@@ -101,11 +101,11 @@ class PayjpObject implements ArrayAccess
                     . "with the result returned by Payjp's API, "
                     . "probably as a result of a save(). The attributes currently "
                     . "available on this object are: $attrs";
-            Payjp::getLogger()->log($message);
+            Payjp::getLogger()->error($message);
             return null;
         } else {
             $class = get_class($this);
-            Payjp::getLogger()->log("Payjp Notice: Undefined property of $class instance: $k");
+            Payjp::getLogger()->error("Payjp Notice: Undefined property of $class instance: $k");
             return null;
         }
     }
