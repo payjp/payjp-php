@@ -52,6 +52,11 @@ echo $charge->amount; // 2000
 - [Request Example](https://github.com/payjp/payjp-php/blob/master/RequestExample.md)
 - Please see our official [documentation](https://pay.jp/docs/started).
 
+## Logging
+
+- This library provides simple log output using `error_log` . You can set any logger that is compatible [PSR-3](https://www.php-fig.org/psr/psr-3/) logger interface. Like below
+- `\Payjp\Payjp::setLogger($logger);`
+
 ## Tests
 
 In order to run tests first install [PHPUnit](http://packagist.org/packages/phpunit/phpunit) via [Composer](http://getcomposer.org/):
