@@ -56,6 +56,7 @@ echo $charge->amount; // 2000
 
 - This library provides simple log output using `error_log` . You can set any logger that is compatible [PSR-3](https://www.php-fig.org/psr/psr-3/) logger interface. Like below
 - `\Payjp\Payjp::setLogger($logger);`
+- As the default behavior, this library output only error level information to stderr.
 
 ## Tests
 

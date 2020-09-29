@@ -11,6 +11,6 @@ class DefaultLogger implements LoggerInterface
 
     public function info($message, array $context = array())
     {
-        error_log($message);
+        // if you need any output, please use \Payjp\Payjp::setLogger
     }
 }
