@@ -2,7 +2,6 @@
 
 namespace Payjp;
 
-
 class PayjpTest extends TestCase
 {
     public function testLogger()
