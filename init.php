@@ -3,7 +3,11 @@
 // Payjp singleton
 require(dirname(__FILE__) . '/lib/Payjp.php');
 
-// Utilities
+// Logger
+require(dirname(__FILE__) . '/lib/Logger/LoggerInterface.php');
+require(dirname(__FILE__) . '/lib/Logger/DefaultLogger.php');
+
+// UtilitiesL
 require(dirname(__FILE__) . '/lib/Util/RequestOptions.php');
 require(dirname(__FILE__) . '/lib/Util/Set.php');
 require(dirname(__FILE__) . '/lib/Util/Util.php');

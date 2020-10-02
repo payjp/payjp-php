@@ -16,6 +16,9 @@ class Payjp
     // @var boolean Defaults to true.
     public static $verifySslCerts = true;
 
+    // @var \Payjp\Logger\LoggerInterface Default logger will output to error_log().
+    public static $logger = null;
+
     // @var int Max retry count for over_capacity 429 response.
     public static $maxRetry = 0;
 
@@ -84,6 +87,24 @@ class Payjp
         self::$verifySslCerts = $verify;
     }
 
+    /**
+     * @return \Payjp\Logger\LoggerInterface
+     */
+    public static function getLogger()
+    {
+        if (self::$logger == null) {
+            return new \Payjp\Logger\DefaultLogger();
+        }
+        return self::$logger;
+    }
+
+    /**
+     * @param \Payjp\Logger\LoggerInterface $logger
+     */
+    public static function setLogger($logger)
+    {
+        self::$logger = $logger;
+    }
     /**
      * @return int
      */
