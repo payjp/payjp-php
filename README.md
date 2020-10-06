@@ -52,6 +52,32 @@ echo $charge->amount; // 2000
 - [Request Example](https://github.com/payjp/payjp-php/blob/master/RequestExample.md)
 - Please see our official [documentation](https://pay.jp/docs/started).
 
+## Retry on HTTP Status Code 429
+
+- See [Rate Limit Guideline](https://pay.jp/docs/guideline-rate-limit#2-%E3%83%AA%E3%83%88%E3%83%A9%E3%82%A4)
+- When you exceeded rate-limit, you can retry request by setting `$maxRetry`  
+  like `\Payjp\Payjp::setMaxRetry(3);` .
+- The retry interval base value is `$retryInitialDelay`  
+  Adjust the value like `\Payjp\Payjp::setRetryInitialDelay(4);`  
+  The smaller is shorter.
+- The retry interval calcurating is based on "Exponential backoff with equal jitter" algorithm.  
+  See https://aws.amazon.com/jp/blogs/architecture/exponential-backoff-and-jitter/
+
+## Logging
+
+- This library provides simple log output using `error_log` . You can set any logger that is compatible [PSR-3](https://www.php-fig.org/psr/psr-3/) logger interface. Like below
+- `\Payjp\Payjp::setLogger($logger);`
+- As the default behavior, this library output only error level information to stderr.
+
+### Logging Case
+#### info
+
+- Every retry on HTTP Status Code 429
+
+#### error
+
+- When you access inaccessible or non-existing property
+
 ## Tests
 
 In order to run tests first install [PHPUnit](http://packagist.org/packages/phpunit/phpunit) via [Composer](http://getcomposer.org/):

@@ -24,8 +24,17 @@ class TestCase extends \PHPUnit_Framework_TestCase
         Payjp::setApiKey($apiKey);
     }
 
+    protected static function setMaxRetryForCi()
+    {
+        $maxRetry = getenv('MAX_RETRY');
+        if ($maxRetry) {
+            Payjp::setMaxRetry($maxRetry);
+        }
+    }
+
     protected function setUp()
     {
+        $this->setMaxRetryForCi();
         ApiRequestor::setHttpClient(HttpClient\CurlClient::instance());
         $this->mock = null;
         $this->call = 0;
@@ -40,7 +49,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
                  ->willReturn(array(json_encode($return), 200));
     }
 
-    private function setUpMockRequest()
+    protected function setUpMockRequest()
     {
         if (!$this->mock) {
             self::authorizeFromEnv();

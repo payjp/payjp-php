@@ -38,6 +38,24 @@ class ApiRequestor
         }
     }
 
+    // @var int Number of digit for randomized sleep time seconds
+    private $digit_num_for_rand = 2;
+
+    /**
+     * Based on "Exponential backoff with equal jitter" algorithm.
+     * https://aws.amazon.com/jp/blogs/architecture/exponential-backoff-and-jitter/
+     *
+     * @param int $retryCount
+     *
+     * @return int retry delay seconds.
+     */
+    private function getRetryDelay($retryCount)
+    {
+        $wait_half = min(Payjp::getRetryMaxDelay(), Payjp::getRetryInitialDelay() * pow(2, $retryCount)) / 2;
+        $scale = pow(10, $this->digit_num_for_rand);
+        return $wait_half + mt_rand(0, $wait_half * $scale) / $scale;
+    }
+
     /**
      * @param string $method
      * @param string $url
@@ -55,8 +73,17 @@ class ApiRequestor
         if (!$headers) {
             $headers = array();
         }
-        list($rbody, $rcode, $myApiKey) =
-        $this->_requestRaw($method, $url, $params, $headers);
+
+        for ($i = 0; $i <= Payjp::getMaxRetry(); $i++) {
+            list($rbody, $rcode, $myApiKey) = $this->_requestRaw($method, $url, $params, $headers);
+            if ($rcode == 429 && $i != Payjp::getMaxRetry()) {
+                $wait = $this->getRetryDelay($i);
+                Payjp::getLogger()->info("Retry after {$wait} seconds.");
+                usleep($wait * 1000000);
+            } else {
+                break;
+            }
+        }
         $resp = $this->_interpretResponse($rbody, $rcode);
         return array($resp, $myApiKey);
     }

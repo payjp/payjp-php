@@ -16,6 +16,24 @@ class Payjp
     // @var boolean Defaults to true.
     public static $verifySslCerts = true;
 
+    // @var \Payjp\Logger\LoggerInterface Default logger will output to error_log().
+    public static $logger = null;
+
+    // @var int Max retry count for over_capacity 429 response.
+    public static $maxRetry = 0;
+
+    /**
+     * The retry interval base value for over_capacity 429 response.
+     * Based on "Exponential backoff with equal jitter" algorithm.
+     * See https://aws.amazon.com/jp/blogs/architecture/exponential-backoff-and-jitter/
+     *
+     * @var int
+     */
+    public static $retryInitialDelay = 2;
+
+    // @var int Max retry delay seconds for over_capacity 429 response.
+    public static $retryMaxDelay = 32;
+
     const VERSION = '1.0.0';
 
     /**
@@ -67,5 +85,71 @@ class Payjp
     public static function setVerifySslCerts($verify)
     {
         self::$verifySslCerts = $verify;
+    }
+
+    /**
+     * @return \Payjp\Logger\LoggerInterface
+     */
+    public static function getLogger()
+    {
+        if (self::$logger == null) {
+            return new \Payjp\Logger\DefaultLogger();
+        }
+        return self::$logger;
+    }
+
+    /**
+     * @param \Payjp\Logger\LoggerInterface $logger
+     */
+    public static function setLogger($logger)
+    {
+        self::$logger = $logger;
+    }
+    /**
+     * @return int
+     */
+    public static function getMaxRetry()
+    {
+        return self::$maxRetry;
+    }
+
+    /**
+     * @param int $value
+     */
+    public static function setMaxRetry($value)
+    {
+        self::$maxRetry = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getRetryInitialDelay()
+    {
+        return self::$retryInitialDelay;
+    }
+
+    /**
+     * @param int $value
+     */
+    public static function setRetryInitialDelay($value)
+    {
+        self::$retryInitialDelay = $value;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getRetryMaxDelay()
+    {
+        return self::$retryMaxDelay;
+    }
+
+    /**
+     * @param int $value
+     */
+    public static function setRetryMaxDelay($value)
+    {
+        self::$retryMaxDelay = $value;
     }
 }
