@@ -69,6 +69,15 @@ echo $charge->amount; // 2000
 - `\Payjp\Payjp::setLogger($logger);`
 - As the default behavior, this library output only error level information to stderr.
 
+### Logging Case
+#### info
+
+- Every retry on HTTP Status Code 429
+
+#### error
+
+- When you access inaccessible or non-existing property
+
 ## Tests
 
 In order to run tests first install [PHPUnit](http://packagist.org/packages/phpunit/phpunit) via [Composer](http://getcomposer.org/):
