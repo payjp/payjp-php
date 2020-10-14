@@ -8,7 +8,7 @@ class PayjpTest extends TestCase
     {
         $msg1 = 'test1';
         $msg2 = 'test2';
-        $mock = $this->getMockBuilder('\Payjp\Logger\LoggerInterface')->getMock();
+        $mock = $this->mock = $this->getMock('\Payjp\HttpClient\ClientInterface');
         $mock->method('info')->with($msg1);
         $mock->method('error')->with($msg2);
         Payjp::setLogger($mock);
