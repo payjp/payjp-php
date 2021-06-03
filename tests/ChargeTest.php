@@ -292,11 +292,10 @@ class ChargeTest extends TestCase
         $this->assertSame(100, $charge->amount_refunded);
     }
 
-    /**
-     * @expectedException Payjp\Error\Card
-     */
     public function testInvalidCard()
     {
+        $this->expectException("\Payjp\Error\Card");
+
         self::authorizeFromEnv();
 
         $params =  [

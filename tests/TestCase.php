@@ -6,13 +6,13 @@ namespace Payjp;
  * Base class for Payjp test cases, provides some utility methods for creating
  * objects.
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
     const API_KEY = 'sk_test_c62fade9d045b54cd76d7036';// public api key for test
     const CURRENCY = 'jpy';
     const COUNTRY = 'JP';
 
-    private $mock;
+    protected $mock;
 
     protected static function authorizeFromEnv()
     {
@@ -32,7 +32,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
     }
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTestCase()
     {
         $this->setMaxRetryForCi();
         ApiRequestor::setHttpClient(HttpClient\CurlClient::instance());
@@ -53,7 +56,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         if (!$this->mock) {
             self::authorizeFromEnv();
-            $this->mock = $this->getMock('\Payjp\HttpClient\ClientInterface');
+            $this->mock = $this->createMock('\Payjp\HttpClient\ClientInterface');
             ApiRequestor::setHttpClient($this->mock);
         }
         return $this->mock;
