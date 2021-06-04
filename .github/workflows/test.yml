@@ -1,4 +1,4 @@
-name: Build Test
+name: Execute Test
 
 on: push
 
@@ -8,12 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [ '5.6', '7.1', '7.2', '7.3', '7.4', 'latest' ]
+        version: [ '5.6', '7.1', '7.2', '7.3', '7.4' ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.version }}
-      - name: Install Lint
+      - name: Execute Test
         run: MAX_RETRY=2 ./build.php 1
