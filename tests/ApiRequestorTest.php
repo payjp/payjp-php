@@ -4,16 +4,22 @@ namespace Payjp;
 
 class ApiRequestorTest extends TestCase
 {
-    protected function setUp()
+    /**
+     * @before
+     */
+    protected function setUpTestCase()
     {
-        parent::setUp();
+        parent::setUpTestCase();
         # MaxRetryを戻してinitialDelayを短くする
         Payjp::setMaxRetry(0);
         Payjp::setRetryInitialDelay(0.1);
         Payjp::setRetryMaxDelay(32);
     }
 
-    protected function tearDown()
+    /**
+     * @after
+     */
+    protected function tearDownTestCase()
     {
         parent::tearDown();
         Payjp::setMaxRetry(0);

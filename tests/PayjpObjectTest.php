@@ -48,7 +48,7 @@ class PayjpObjectTest extends TestCase
 
         $converted = $s->__toArray();
 
-        $this->assertInternalType('array', $converted);
+        $this->assertSame('array', gettype($converted));
         $this->assertArrayHasKey('foo', $converted);
         $this->assertEquals('a', $converted['foo']);
     }
@@ -63,9 +63,9 @@ class PayjpObjectTest extends TestCase
 
         $converted = $s->__toArray(true);
 
-        $this->assertInternalType('array', $converted);
+        $this->assertSame('array', gettype($converted));
         $this->assertArrayHasKey('child', $converted);
-        $this->assertInternalType('array', $converted['child']);
+        $this->assertSame('array', gettype($converted['child']));
         $this->assertArrayHasKey('foo', $converted['child']);
         $this->assertEquals('a', $converted['child']['foo']);
     }
