@@ -82,21 +82,17 @@ class CustomerTest extends TestCase
         $this->assertSame('gdb@pay.jp', $customer->email);
     }
 
-    /**
-     * @expectedException Payjp\Error\InvalidRequest
-     */
     public function testBogusAttribute()
     {
+        $this->expectException("\Payjp\Error\InvalidRequest");
         $customer = self::createTestCustomer();
         $customer->bogus = 'bogus';
         $customer->save();
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testUpdateDescriptionEmpty()
     {
+        $this->expectException("\InvalidArgumentException");
         $customer = self::createTestCustomer();
         $customer->description = '';
         

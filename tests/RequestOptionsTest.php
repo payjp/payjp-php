@@ -70,11 +70,9 @@ class RequestOptionsTest extends TestCase
         $this->assertSame(array('Idempotency-Key' => 'foo'), $opts->headers);
     }
 
-    /**
-     * @expectedException Payjp\Error\Api
-     */
     public function testWrongType()
     {
+        $this->expectException("\Payjp\Error\Api");
         $opts = Util\RequestOptions::parse(5);
     }
 }
