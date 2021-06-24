@@ -1,6 +1,6 @@
 # PAY.JP for PHP
 
-[![Build Status](https://travis-ci.org/payjp/payjp-php.svg?branch=master)](https://travis-ci.org/payjp/payjp-php)
+[![Build Status](https://github.com/payjp/payjp-php/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/payjp/payjp-php/actions)
 
 ## Requirements
 
