@@ -79,7 +79,7 @@ class ApiRequestor
             if ($rcode == 429 && $i != Payjp::getMaxRetry()) {
                 $wait = $this->getRetryDelay($i);
                 Payjp::getLogger()->info("Retry after {$wait} seconds.");
-                usleep($wait * 1000000);
+                usleep((int) $wait * 1000000);
             } else {
                 break;
             }
