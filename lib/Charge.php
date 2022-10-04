@@ -74,4 +74,18 @@ class Charge extends ApiResource
         $this->refreshFrom($response, $opts);
         return $this;
     }
+
+    /**
+     * @param array|null $params
+     * @param array|string|null $options
+     *
+     * @return Charge The paid charge.
+     */
+    public function tds_finish($params = null, $options = null)
+    {
+        $url = $this->instanceUrl() . '/tds_finish';
+        list($response, $opts) = $this->_request('post', $url, $params, $options);
+        $this->refreshFrom($response, $opts);
+        return $this;
+    }
 }
