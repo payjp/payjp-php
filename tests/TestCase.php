@@ -14,6 +14,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     protected $mock;
 
+    public $call;
+
     protected static function authorizeFromEnv()
     {
         $apiKey = getenv('PAYJP_API_KEY');

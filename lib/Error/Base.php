@@ -6,6 +6,10 @@ use Exception;
 
 abstract class Base extends Exception
 {
+    public $httpStatus;
+    public $httpBody;
+    public $jsonBody;
+
     public function __construct(
         $message,
         $httpStatus = null,
