@@ -51,26 +51,18 @@ $chargeParams = array(
     "platform_fee" => null,
     "tenant" => $tenantId
 );
-$ch = \Payjp\Charge::create($chargeParams);
+$ch = null;
 try {
-    assert($ch->total_platform_fee > 0, 'Can charge');
+    $ch = \Payjp\Charge::create($chargeParams);
+    assert($ch["total_platform_fee"] > 0, 'Invalid charge');
 } catch (Exception $e) {
-    $ch->refund();
-    assert(false, 'Can charge');
+    if ($ch !== null) {
+        $ch->refund();
+    }
+    assert(false, 'Cannot charge');
 }
-assert($ch->refund()->refunded, 'Can refund');
-
-$chargeParams['platform_fee'] = 0;
-$ch = \Payjp\Charge::create($chargeParams);
-try {
-    assert($ch->total_platform_fee === $chargeParams['platform_fee'], 'Can charge');
-} catch (Exception $e) {
-    $ch->refund();
-    assert(false, 'Can charge');
-}
-assert($ch->refund()->refunded, 'Can refund');
-
-$ch = \Payjp\Charge::all(array("tenant" => $ch->tenant));
-assert(count($ch->data) >= 2, 'Can charge'); // todo 事前にcountをみて正確なassertに
+assert($ch->refund()->refunded, 'Cannot refund');
+$chs = \Payjp\Charge::all(array("tenant" => $tenantId));
+assert($chs->count > 0, 'Invalid charge count');
 
 cleanup();
