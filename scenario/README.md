@@ -9,6 +9,7 @@ php scenario/TenantForPlatform.php
 
 $PAYJP_API_KEY=<your_sk_key> \
 TENANT_ID=<your_tenant_id> \
+CUSTOMER_ID=<your_tenant_id> \
 php scenario/ChargeForPlatform.php
 
 $PAYJP_API_KEY=<your_sk_key> \

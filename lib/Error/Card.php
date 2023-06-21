@@ -4,6 +4,8 @@ namespace Payjp\Error;
 
 class Card extends Base
 {
+    public $param;
+
     public function __construct(
         $message,
         $param,

@@ -54,7 +54,7 @@ abstract class ApiResource extends PayjpObject
     public static function classUrl()
     {
         $base = static::className();
-        return "/v1/${base}s";
+        return "/v1/{$base}s";
     }
 
     /**
