@@ -57,7 +57,7 @@ class TenantTransferTest extends TestCase
 
     public function testStatementUrls()
     {
-        $expectedTenantId = 'tr_8f0c0fe2c9f8a47f9d18f03959ba1';
+        $expectedTenantId = 'tr_8f0c0fe2c9f8a47f9d18f03959bxx';
         $expectedTenantTransferId = 'ten_tr_23748b8c95c79edff22a8b7b795xx';
         $this->mockRequest('GET', '/v1/tenant_transfers/' . $expectedTenantTransferId, array(), $this->managedTenantTransferResource($expectedTenantId, $expectedTenantTransferId));
         $this->mockRequest('POST', '/v1/tenant_transfers/' . $expectedTenantTransferId . '/statement_urls', array(), $this->managedDownloadUrlResource());
