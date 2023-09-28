@@ -53,7 +53,7 @@ class StatementTest extends TestCase
         );
     }
 
-    private function managedDownloadUrlResource($id)
+    private function managedDownloadUrlResource()
     {
         return array(
             'object' => 'statement_download_url',
@@ -85,7 +85,7 @@ class StatementTest extends TestCase
     {
         $expectedStatementId = 'st_0d08780a33ab77f1c911a1b7286bd';
         $this->mockRequest('GET', '/v1/statements/' . $expectedStatementId, array(), $this->managedStatementResource($expectedStatementId));
-        $this->mockRequest('POST', '/v1/statements/' . $expectedStatementId . '/statement_urls', array(), $this->managedDownloadUrlResource($expectedStatementId));
+        $this->mockRequest('POST', '/v1/statements/' . $expectedStatementId . '/statement_urls', array(), $this->managedDownloadUrlResource());
         $statementUrls = Statement::retrieve($expectedStatementId)->statementUrls->create();
         $this->assertSame('statement_download_url', $statementUrls->object);
         $this->assertTrue($statementUrls->expires > 0);
