@@ -4,39 +4,39 @@ namespace Payjp;
 
 class TenantTransferTest extends TestCase
 {
-    private function managedStatementResource($id)
+    private function managedTenantTransferResource($tenantId, $tenantTransferId)
     {
         return array(
+            'amount' => 0,
+            'carried_balance' => null,
+            'charges' => array(
+                'count' => 0,
+                'data' => [],
+                'has_more' => false,
+                'object' => 'list',
+                'url' => 'https://api.pay.jp/v1/transfers/' . $tenantId . '/tenant_transfers/' . $tenantTransferId . '/charges',
+            ),
             'created' => time(),
-            'id' => $id,
-            'items' => [
-                [
-                    'amount' => 282358654,
-                    'name' => '売上',
-                    'subject' => 'gross_sales',
-                    'tax_rate' => '0.00'
-                ],
-                [
-                    'amount' => -65699624,
-                    'name' => '返金',
-                    'subject' => 'gross_refund',
-                    'tax_rate' => '0.00'
-                ],
-                [
-                    'amount' => -7054912,
-                    'name' => '決済手数料',
-                    'subject' => 'fee',
-                    'tax_rate' => '0.10'
-                ],
-                [
-                    'amount' => 1644315,
-                    'name' => '返金による手数料返還',
-                    'subject' => 'refund_fee_offset',
-                    'tax_rate' => '0.10'
-                ]
-            ],
-            'object' => 'statement',
-            'title' => null
+            'currency' => 'ja',
+            'id' => $tenantTransferId,
+            'livemode' => false,
+            'object' => 'tenant_transfer',
+            'scheduled_date' => '2015-09-16',
+            'status' => 'pending',
+            'summary' => array(
+                'charge_count' => 0,
+                'charge_fee' => 0,
+                'total_platform_fee' => 0,
+                'charge_gross' => 0,
+                'net' => 0,
+                'refund_amount' => 0,
+                'refund_count' => 0,
+                'dispute_amount' => 0,
+                'dispute_count' => 0,
+            ),
+            'tenant_id' => $tenantId,
+            'term_end' => 1439650800,
+            'term_start' => 1438354800,
         );
     }
 
@@ -57,9 +57,9 @@ class TenantTransferTest extends TestCase
 
     public function testStatementUrls()
     {
-        $expectedTenantTransferId = 'ten_0d08780a33ab77f1c911a1b7286bd';
-        $expectedStatementId = 'st_0d08780a33ab77f1c911a1b7286bd';
-        $this->mockRequest('GET', '/v1/tenant_transfers/' . $expectedTenantTransferId, array(), $this->managedStatementResource($expectedStatementId));
+        $expectedTenantId = 'tr_8f0c0fe2c9f8a47f9d18f03959ba1';
+        $expectedTenantTransferId = 'ten_tr_23748b8c95c79edff22a8b7b795xx';
+        $this->mockRequest('GET', '/v1/tenant_transfers/' . $expectedTenantTransferId, array(), $this->managedTenantTransferResource($expectedTenantId, $expectedTenantTransferId));
         $this->mockRequest('POST', '/v1/tenant_transfers/' . $expectedTenantTransferId . '/statement_urls', array(), $this->managedDownloadUrlResource());
         $statementUrls = TenantTransfer::retrieve($expectedTenantTransferId)->statementUrls->create();
         $this->assertSame('statement_download_url', $statementUrls->object);
