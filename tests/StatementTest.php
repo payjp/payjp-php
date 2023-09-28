@@ -56,7 +56,7 @@ class StatementTest extends TestCase
     private function managedDownloadUrlResource()
     {
         return array(
-            'object' => 'statement_download_url',
+            'object' => 'statement_url',
             'url' => 'https://pay.jp/_/statements/a845383731564192xxxxxxxxxxxxxxxx',
             'expires' => 1695796301,
         );
@@ -87,7 +87,7 @@ class StatementTest extends TestCase
         $this->mockRequest('GET', '/v1/statements/' . $expectedStatementId, array(), $this->managedStatementResource($expectedStatementId));
         $this->mockRequest('POST', '/v1/statements/' . $expectedStatementId . '/statement_urls', array(), $this->managedDownloadUrlResource());
         $statementUrls = Statement::retrieve($expectedStatementId)->statementUrls->create();
-        $this->assertSame('statement_download_url', $statementUrls->object);
+        $this->assertSame('statement_url', $statementUrls->object);
         $this->assertTrue($statementUrls->expires > 0);
         $this->assertNotEmpty($statementUrls->url);
     }

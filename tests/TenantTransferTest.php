@@ -43,7 +43,7 @@ class TenantTransferTest extends TestCase
     private function managedDownloadUrlResource()
     {
         return array(
-            'object' => 'statement_download_url',
+            'object' => 'statement_url',
             'url' => 'https://pay.jp/_/statements/a845383731564192xxxxxxxxxxxxxxxx',
             'expires' => 1695796301,
         );
@@ -62,7 +62,7 @@ class TenantTransferTest extends TestCase
         $this->mockRequest('GET', '/v1/tenant_transfers/' . $expectedTenantTransferId, array(), $this->managedTenantTransferResource($expectedTenantId, $expectedTenantTransferId));
         $this->mockRequest('POST', '/v1/tenant_transfers/' . $expectedTenantTransferId . '/statement_urls', array(), $this->managedDownloadUrlResource());
         $statementUrls = TenantTransfer::retrieve($expectedTenantTransferId)->statementUrls->create();
-        $this->assertSame('statement_download_url', $statementUrls->object);
+        $this->assertSame('statement_url', $statementUrls->object);
         $this->assertTrue($statementUrls->expires > 0);
         $this->assertNotEmpty($statementUrls->url);
     }
