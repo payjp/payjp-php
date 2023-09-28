@@ -81,14 +81,14 @@ class StatementTest extends TestCase
         $this->assertSame($expectedStatementIds[1], $statements['data'][1]->id);
     }
 
-    public function testDownloadUrls()
+    public function testStatementUrls()
     {
         $expectedStatementId = 'st_0d08780a33ab77f1c911a1b7286bd';
         $this->mockRequest('GET', '/v1/statements/' . $expectedStatementId, array(), $this->managedStatementResource($expectedStatementId));
-        $this->mockRequest('POST', '/v1/statements/' . $expectedStatementId . '/download_urls', array(), $this->managedDownloadUrlResource($expectedStatementId));
-        $downloadUrls = Statement::retrieve($expectedStatementId)->downloadUrls->create();
-        $this->assertSame('statement_download_url', $downloadUrls->object);
-        $this->assertTrue($downloadUrls->expires > 0);
-        $this->assertNotEmpty($downloadUrls->url);
+        $this->mockRequest('POST', '/v1/statements/' . $expectedStatementId . '/statement_urls', array(), $this->managedDownloadUrlResource($expectedStatementId));
+        $statementUrls = Statement::retrieve($expectedStatementId)->statementUrls->create();
+        $this->assertSame('statement_download_url', $statementUrls->object);
+        $this->assertTrue($statementUrls->expires > 0);
+        $this->assertNotEmpty($statementUrls->url);
     }
 }

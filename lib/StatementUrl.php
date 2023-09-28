@@ -2,7 +2,7 @@
 
 namespace Payjp;
 
-class StatementDownloadUrl extends ApiResource
+class StatementUrl extends ApiResource
 {
     public $_url = '';
 
@@ -10,13 +10,13 @@ class StatementDownloadUrl extends ApiResource
      * @param array|null $params
      * @param RequestOptions|array|string|null $options
      *
-     * @return StatementDownloadUrl
+     * @return StatementUrl
      */
     public function create($params = null, $options = null)
     {
         list($response, $opts) = $this->_request('post', $this->_url, $params, $options);
-        $statementDownloadUrl = Util\Util::convertToPayjpObject($response, $opts);
-        $statementDownloadUrl->_url = $this->_url;
-        return $statementDownloadUrl;
+        $statementUrl = Util\Util::convertToPayjpObject($response, $opts);
+        $statementUrl->_url = $this->_url;
+        return $statementUrl;
     }
 }

@@ -12,7 +12,7 @@ abstract class Util
         'card' => 'Payjp\\Card',
         'charge' => 'Payjp\\Charge',
         'customer' => 'Payjp\\Customer',
-        'statement_download_url' => 'Payjp\\StatementDownloadUrl',
+        'statement_download_url' => 'Payjp\\StatementUrl',
         'event' => 'Payjp\\Event',
         'list' => 'Payjp\\Collection',
         'plan' => 'Payjp\\Plan',

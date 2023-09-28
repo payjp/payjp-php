@@ -4,13 +4,13 @@ namespace Payjp;
 
 class Statement extends ApiResource
 {
-    public $downloadUrls;
+    public $statementUrls;
 
     public function __construct($id = null, $opts = null)
     {
         parent::__construct($id, $opts);
-        $this->downloadUrls = new StatementDownloadUrl(null, $opts);
-        $this->downloadUrls->_url = $this->instanceUrl() . '/download_urls';
+        $this->statementUrls = new StatementUrl(null, $opts);
+        $this->statementUrls->_url = $this->instanceUrl() . '/statement_urls';
     }
 
     /**
