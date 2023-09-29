@@ -15,6 +15,8 @@ abstract class Util
         'event' => 'Payjp\\Event',
         'list' => 'Payjp\\Collection',
         'plan' => 'Payjp\\Plan',
+        'statement' => 'Payjp\\Statement',
+        'statement_url' => 'Payjp\\StatementUrl',
         'subscription' => 'Payjp\\Subscription',
         'tenant' => 'Payjp\\Tenant',
         'token' => 'Payjp\\Token',

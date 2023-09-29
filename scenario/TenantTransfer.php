@@ -18,6 +18,9 @@ function cleanup()
 {
 }
 
+$st = \Payjp\Statement::all();
+assert($st->url === '/v1/statements', 'Can get statements');
+
 $tenantId = getenv('TENANT_ID');
 $tenantTransfers = \Payjp\TenantTransfer::all(array('tenant' => $tenantId));
 assert($tenantTransfers->url === '/v1/tenant_transfers', 'Can get tenant_transfers');
@@ -27,6 +30,11 @@ foreach ($tenantTransfers->data as $tt) {
     assert($tenantId === $tt->tenant_id, 'Can get tenant_transfer');
     assert($tt->object === 'tenant_transfer', 'Can get tenant_transfer');
     $tt_chs = $tt->charges;
+    try {
+        $tt->statementUrls->create();
+    } catch(\Payjp\Error\Base $e) {
+        assert($e->getHttpStatus() === 404);
+    }
     assert($tt_chs->object === 'list', 'Can get tenant_transfer charges');
     foreach ($tt_chs->data as $ch) {
         assert($ch->tenant === $tenantId, 'Can get tenant_transfer charges for platform');
