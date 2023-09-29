@@ -42,7 +42,7 @@ require(dirname(__FILE__) . '/lib/Customer.php');
 require(dirname(__FILE__) . '/lib/Event.php');
 require(dirname(__FILE__) . '/lib/Plan.php');
 require(dirname(__FILE__) . '/lib/Statement.php');
-require(dirname(__FILE__) . '/lib/StatementDownloadUrl.php');
+require(dirname(__FILE__) . '/lib/StatementUrl.php');
 require(dirname(__FILE__) . '/lib/Subscription.php');
 require(dirname(__FILE__) . '/lib/Token.php');
 require(dirname(__FILE__) . '/lib/Transfer.php');
