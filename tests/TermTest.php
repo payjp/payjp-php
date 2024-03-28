@@ -62,7 +62,7 @@ class TermTest extends TestCase
         $terms = Term::all();
         $this->assertSame(count($expectedTermIds), $terms['count']);
         $this->assertCount(count($expectedTermIds), $terms['data']);
-        foreach($terms['data'] as $index => $term) {
+        foreach ($terms['data'] as $index => $term) {
             $this->assertInstanceOf(Term::class, $term);
             $this->assertSame($expectedTermIds[$index], $term->id);
         }
