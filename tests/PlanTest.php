@@ -7,82 +7,75 @@ class PlanTest extends TestCase
     public function testCreateRetrieveAll()
     {
         self::authorizeFromEnv();
-        $planID = 'gold-' . self::randomString();
-        $p = Plan::create(array(
+        $planId = 'gold-' . self::randomString();
+        $p = Plan::create([
             'amount'   => 2000,
             'interval' => 'month',
             'currency' => self::CURRENCY,
             'name'     => 'Plan',
-            'id'       => $planID
-        ));
-        
-        $plan_retrieve = Plan::retrieve($planID);
-        $this->assertSame($planID, $plan_retrieve->id);
-                
-        $planID_2 = 'foobar-2-' . self::randomString();
-        $p_2 = Plan::create(
-            array(
-                'amount'   => 3000,
-                'interval' => 'month',
-                'currency' => self::CURRENCY,
-                'name'     => 'Plan_2',
-                'id'       => $planID_2
-            )
-        );
+            'id'       => $planId
+        ]);
 
-        $plans = Plan::all(
-            array(
-                'limit' => 2,
-                'offset' => 0
-            )
-        );
+        $plan_retrieve = Plan::retrieve($planId);
+        $this->assertSame($planId, $plan_retrieve->id);
+
+        $planId_2 = 'foobar-2-' . self::randomString();
+        $p_2 = Plan::create([
+            'amount'   => 3000,
+            'interval' => 'month',
+            'currency' => self::CURRENCY,
+            'name'     => 'Plan_2',
+            'id'       => $planId_2
+        ]);
+
+        $plans = Plan::all([
+            'limit' => 2,
+            'offset' => 0
+        ]);
         $this->assertSame(2, count($plans['data']));
     }
 
     public function testDeletion()
     {
         self::authorizeFromEnv();
-        $plan_ID = 'gold-' . self::randomString();
-        $p = Plan::create(array(
+        $planId = 'gold-' . self::randomString();
+        $p = Plan::create([
             'amount' => 2000,
             'interval' => 'month',
             'currency' => self::CURRENCY,
             'name' => 'Plan',
-            'id' => $plan_ID
-        ));
+            'id' => $planId
+        ]);
         $p->delete();
         $this->assertTrue($p->deleted);
-        $this->assertSame($plan_ID, $p->id);
+        $this->assertSame($planId, $p->id);
     }
 
     public function testFalseyId()
     {
         try {
-            $retrievedPlan = Plan::retrieve('0');
+            Plan::retrieve('0');
         } catch (Error\InvalidRequest $e) {
-            // Can either succeed or 404, all other errors are bad
-            if ($e->httpStatus !== 404) {
-                $this->fail();
-            }
+            $this->assertSame(404, $e->httpStatus);
         }
     }
 
     public function testSave()
     {
         self::authorizeFromEnv();
-        $planID = 'gold-' . self::randomString();
-        $p = Plan::create(array(
+        $planId = 'gold-' . self::randomString();
+        $p = Plan::create([
             'amount'   => 2000,
             'interval' => 'month',
             'currency' => self::CURRENCY,
             'name'     => 'Plan',
-            'id'       => $planID
-        ));
+            'id'       => $planId
+        ]);
         $p->name = 'A new plan name';
         $p->save();
         $this->assertSame($p->name, 'A new plan name');
 
-        $payjpPlan = Plan::retrieve($planID);
+        $payjpPlan = Plan::retrieve($planId);
         $this->assertSame($p->name, $payjpPlan->name);
     }
 }
