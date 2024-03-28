@@ -8,21 +8,21 @@ abstract class Util
 {
     // todo wanna use 'private const' (only PHP >= v7.1.0)
     private static $types = array(
-        'application_url' => 'Payjp\\ApplicationUrl',
-        'card' => 'Payjp\\Card',
-        'charge' => 'Payjp\\Charge',
-        'customer' => 'Payjp\\Customer',
-        'event' => 'Payjp\\Event',
-        'list' => 'Payjp\\Collection',
-        'plan' => 'Payjp\\Plan',
-        'statement' => 'Payjp\\Statement',
-        'statement_url' => 'Payjp\\StatementUrl',
-        'subscription' => 'Payjp\\Subscription',
-        'tenant' => 'Payjp\\Tenant',
-        'token' => 'Payjp\\Token',
-        'tenant_transfer' => 'Payjp\\TenantTransfer',
-        'term' => 'Payjp\\Term',
-        'transfer' => 'Payjp\\Transfer',
+        'application_url' => \Payjp\ApplicationUrl::class,
+        'card' => \Payjp\Card::class,
+        'charge' => \Payjp\Charge::class,
+        'customer' => \Payjp\Customer::class,
+        'event' => \Payjp\Event::class,
+        'list' => \Payjp\Collection::class,
+        'plan' => \Payjp\Plan::class,
+        'statement' => \Payjp\Statement::class,
+        'statement_url' => \Payjp\StatementUrl::class,
+        'subscription' => \Payjp\Subscription::class,
+        'tenant' => \Payjp\Tenant::class,
+        'token' => \Payjp\Token::class,
+        'tenant_transfer' => \Payjp\TenantTransfer::class,
+        'term' => \Payjp\Term::class,
+        'transfer' => \Payjp\Transfer::class,
     );
 
     /**
