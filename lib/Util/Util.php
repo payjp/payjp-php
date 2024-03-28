@@ -21,6 +21,7 @@ abstract class Util
         'tenant' => 'Payjp\\Tenant',
         'token' => 'Payjp\\Token',
         'tenant_transfer' => 'Payjp\\TenantTransfer',
+        'term' => 'Payjp\\Term',
         'transfer' => 'Payjp\\Transfer',
     );
 
