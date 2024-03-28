@@ -45,14 +45,14 @@ class TermTest extends TestCase
         $this->mockRequest('GET', "/v1/terms/$expectedTermId", [], $expectedTermResource);
         $term = Term::retrieve($expectedTermId);
         $this->assertSame($expectedTermId, $term->id);
-        $this->assertSame($expectedTermResource["created"], $term->created);
-        $this->assertSame($expectedTermResource["livemode"], $term->livemode);
-        $this->assertSame($expectedTermResource["object"], $term->object);
-        $this->assertSame($expectedTermResource["charge_count"], $term->charge_count);
-        $this->assertSame($expectedTermResource["refund_count"], $term->refund_count);
-        $this->assertSame($expectedTermResource["dispute_count"], $term->dispute_count);
-        $this->assertSame($expectedTermResource["end_at"], $term->end_at);
-        $this->assertSame($expectedTermResource["start_at"], $term->start_at);
+        $this->assertSame($expectedTermResource['created'], $term->created);
+        $this->assertSame($expectedTermResource['livemode'], $term->livemode);
+        $this->assertSame($expectedTermResource['object'], $term->object);
+        $this->assertSame($expectedTermResource['charge_count'], $term->charge_count);
+        $this->assertSame($expectedTermResource['refund_count'], $term->refund_count);
+        $this->assertSame($expectedTermResource['dispute_count'], $term->dispute_count);
+        $this->assertSame($expectedTermResource['end_at'], $term->end_at);
+        $this->assertSame($expectedTermResource['start_at'], $term->start_at);
     }
 
     public function testAll()
