@@ -6,7 +6,7 @@ class StatementTest extends TestCase
 {
     private function managedStatementResource($id)
     {
-        return array(
+        return [
             'created' => time(),
             'id' => $id,
             'items' => [
@@ -35,14 +35,16 @@ class StatementTest extends TestCase
                     'tax_rate' => '0.10'
                 ]
             ],
+            'livemode' => false,
             'object' => 'statement',
-            'title' => null
-        );
+            'title' => null,
+            'updated' => 1695892351,
+        ];
     }
 
     private function managedStatementResources($ids)
     {
-        return array(
+        return [
             'count' => count($ids),
             'data' => array_map(function ($id) {
                 return $this->managedStatementResource($id);
@@ -50,7 +52,7 @@ class StatementTest extends TestCase
             'has_more' => false,
             'object' => 'list',
             'url' => '/v1/statements'
-        );
+        ];
     }
 
     private function managedDownloadUrlResource()
@@ -65,9 +67,21 @@ class StatementTest extends TestCase
     public function testRetrieve()
     {
         $expectedStatementId = 'st_0d08780a33ab77f1c911a1b7286bd';
-        $this->mockRequest('GET', '/v1/statements/' . $expectedStatementId, array(), $this->managedStatementResource($expectedStatementId));
+        $expectedStatementResource = $this->managedStatementResource($expectedStatementId);
+        $this->mockRequest('GET', '/v1/statements/' . $expectedStatementId, [], $expectedStatementResource);
         $statement = Statement::retrieve($expectedStatementId);
+        $this->assertSame($expectedStatementResource['created'], $statement->created);
         $this->assertSame($expectedStatementId, $statement->id);
+        $this->assertSame($expectedStatementResource['object'], $statement->object);
+        $this->assertSame($expectedStatementResource['livemode'], $statement->livemode);
+        $this->assertSame($expectedStatementResource['title'], $statement->title);
+        $this->assertSame($expectedStatementResource['updated'], $statement->updated);
+        foreach ($statement->items as $item) {
+            $this->assertArrayHasKey('amount', $item);
+            $this->assertArrayHasKey('name', $item);
+            $this->assertArrayHasKey('subject', $item);
+            $this->assertArrayHasKey('tax_rate', $item);
+        }
     }
 
     public function testAll()
@@ -75,8 +89,8 @@ class StatementTest extends TestCase
         $expectedStatementIds = array('st_6b7d642291873e7b97e9175d7d6b8', 'st_0d08780a33ab77f1c911a1b7286bd');
         $this->mockRequest('GET', '/v1/statements', array(), $this->managedStatementResources($expectedStatementIds));
         $statements = Statement::all();
-        $this->assertSame(2, $statements['count']);
-        $this->assertCount(2, $statements['data']);
+        $this->assertSame(count($expectedStatementIds), $statements['count']);
+        $this->assertCount(count($expectedStatementIds), $statements['data']);
         $this->assertSame($expectedStatementIds[0], $statements['data'][0]->id);
         $this->assertSame($expectedStatementIds[1], $statements['data'][1]->id);
     }
