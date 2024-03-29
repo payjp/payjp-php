@@ -4,6 +4,21 @@ namespace Payjp;
 
 class StatementTest extends TestCase
 {
+    private function termResource($id)
+    {
+        return [
+            'created' => 1438354800,
+            'id' => $id,
+            'livemode' => false,
+            'object' => 'term',
+            'charge_count' => 158,
+            'refund_count' => 25,
+            'dispute_count' => 2,
+            'end_at' => 1439650800,
+            'start_at' => 1438354800,
+        ];
+    }
+
     private function managedStatementResource($id)
     {
         return [
@@ -39,6 +54,8 @@ class StatementTest extends TestCase
             'object' => 'statement',
             'title' => null,
             'updated' => 1695892351,
+            'term' => $this->termResource('tm_sample'),
+            'balance_id' => 'balance_id',
         ];
     }
 
@@ -76,6 +93,8 @@ class StatementTest extends TestCase
         $this->assertSame($expectedStatementResource['livemode'], $statement->livemode);
         $this->assertSame($expectedStatementResource['title'], $statement->title);
         $this->assertSame($expectedStatementResource['updated'], $statement->updated);
+        $this->assertInstanceOf(Term::class, $statement->term);
+        $this->assertSame($expectedStatementResource['balance_id'], $statement->balance_id);
         foreach ($statement->items as $item) {
             $this->assertArrayHasKey('amount', $item);
             $this->assertArrayHasKey('name', $item);

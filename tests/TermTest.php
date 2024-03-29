@@ -4,9 +4,6 @@ namespace Payjp;
 
 class TermTest extends TestCase
 {
-    /**
-     * @return array
-     */
     private function termResource($id)
     {
         return [
@@ -22,9 +19,6 @@ class TermTest extends TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
     private function termsResource($ids = [])
     {
         return [
