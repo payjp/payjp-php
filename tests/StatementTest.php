@@ -55,6 +55,7 @@ class StatementTest extends TestCase
             'net' => 211248433,
             'object' => 'statement',
             'tenant_id' => 'ten_sample',
+            'type' => 'sales',
             'term' => $this->termResource('tm_sample'),
             'title' => null,
             'updated' => 1695892351,
@@ -97,6 +98,7 @@ class StatementTest extends TestCase
         $this->assertSame($expectedStatementResource['object'], $statement->object);
         $this->assertSame($expectedStatementResource['tenant_id'], $statement->tenant_id);
         $this->assertSame($expectedStatementResource['title'], $statement->title);
+        $this->assertSame($expectedStatementResource['type'], $statement->type);
         $this->assertSame($expectedStatementResource['updated'], $statement->updated);
         $this->assertInstanceOf(Term::class, $statement->term);
         foreach ($statement->items as $item) {

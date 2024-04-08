@@ -72,6 +72,7 @@ class BalanceTest extends TestCase
                     'livemode' => true,
                     'title' => null,
                     'tenant_id' => null,
+                    'type' => 'sales',
                     'updated' => 1695892351
                 ], [
                     'balance_id' => $id,
@@ -91,6 +92,7 @@ class BalanceTest extends TestCase
                     'livemode' => true,
                     'title' => 'プロプラン月額料金',
                     'tenant_id' => null,
+                    'type' => 'service_fee',
                     'updated' => 1695892350
                 ],
                 'has_more' => false,
