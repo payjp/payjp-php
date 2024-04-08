@@ -7,7 +7,6 @@ class TermTest extends TestCase
     private function termResource($id)
     {
         return [
-            'created' => 1438354800,
             'id' => $id,
             'livemode' => false,
             'object' => 'term',
@@ -39,7 +38,6 @@ class TermTest extends TestCase
         $this->mockRequest('GET', "/v1/terms/$expectedTermId", [], $expectedTermResource);
         $term = Term::retrieve($expectedTermId);
         $this->assertSame($expectedTermId, $term->id);
-        $this->assertSame($expectedTermResource['created'], $term->created);
         $this->assertSame($expectedTermResource['livemode'], $term->livemode);
         $this->assertSame($expectedTermResource['object'], $term->object);
         $this->assertSame($expectedTermResource['charge_count'], $term->charge_count);
