@@ -34,7 +34,7 @@ class TransferTest extends TestCase
                 'limit' => 3,
                 'offset' => 0
             ]);
-            $this->assertCount(2, $charges['data']);
+            $this->assertCount(3, $charges['data']);
         }
     }
 }
