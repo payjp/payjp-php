@@ -4,6 +4,20 @@ namespace Payjp;
 
 class BalanceTest extends TestCase
 {
+    private function termResource($id)
+    {
+        return [
+            'id' => $id,
+            'livemode' => false,
+            'object' => 'term',
+            'charge_count' => 158,
+            'refund_count' => 25,
+            'dispute_count' => 2,
+            'end_at' => 1439650800,
+            'start_at' => 1438354800,
+        ];
+    }
+
     private function balanceResource($id)
     {
         return [
@@ -12,12 +26,14 @@ class BalanceTest extends TestCase
             'livemode' => false,
             'net' => 1000,
             'object' => 'balance',
-            'type' => 'collecting',
+            'state' => 'collecting',
             'statements' => [
                 'count' => 2,
                 'data' => [
+                    'balance_id' => $id,
+                    'term' => $this->termResource('tm_sample1'),
                     'created' => 1695892351,
-                    'id' => 'st_178fd25dc7ab7b75906f5d4c4b0e6',
+                    'id' => 'st_sample1',
                     'items' => [
                         [
                             'amount' => 25,
@@ -51,13 +67,17 @@ class BalanceTest extends TestCase
                             'tax_rate' => '0.00'
                         ]
                     ],
+                    'net' => 536,
                     'object' => 'statement',
                     'livemode' => true,
                     'title' => null,
+                    'tenant_id' => null,
                     'updated' => 1695892351
                 ], [
+                    'balance_id' => $id,
+                    'term' => null,
                     'created' => 1695892350,
-                    'id' => 'st_b4a569b0122a7d08b298f198cf263',
+                    'id' => 'st_sample2',
                     'items' => [
                         [
                             'amount' => -10000,
@@ -66,9 +86,11 @@ class BalanceTest extends TestCase
                             'tax_rate' => '10.00'
                         ]
                     ],
+                    'net' => -10000,
                     'object' => 'statement',
                     'livemode' => true,
                     'title' => 'プロプラン月額料金',
+                    'tenant_id' => null,
                     'updated' => 1695892350
                 ],
                 'has_more' => false,
@@ -97,7 +119,7 @@ class BalanceTest extends TestCase
             }, $ids),
             'has_more' => false,
             'object' => 'list',
-            'url' => '/v1/terms',
+            'url' => '/v1/balances',
         ];
     }
 
@@ -112,7 +134,7 @@ class BalanceTest extends TestCase
         $this->assertSame($expectedBalanceResource['livemode'], $balance->livemode);
         $this->assertSame($expectedBalanceResource['net'], $balance->net);
         $this->assertSame($expectedBalanceResource['object'], $balance->object);
-        $this->assertSame($expectedBalanceResource['type'], $balance->type);
+        $this->assertSame($expectedBalanceResource['state'], $balance->state);
         $this->assertSame($expectedBalanceResource['closed'], $balance->closed);
         $this->assertSame($expectedBalanceResource['due_date'], $balance->due_date);
 
