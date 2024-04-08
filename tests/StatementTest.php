@@ -22,6 +22,7 @@ class StatementTest extends TestCase
     private function managedStatementResource($id)
     {
         return [
+            'balance_id' => 'ba_sample',
             'created' => time(),
             'id' => $id,
             'items' => [
@@ -51,11 +52,12 @@ class StatementTest extends TestCase
                 ]
             ],
             'livemode' => false,
+            'net' => 211248433,
             'object' => 'statement',
+            'tenant_id' => 'ten_sample',
+            'term' => $this->termResource('tm_sample'),
             'title' => null,
             'updated' => 1695892351,
-            'term' => $this->termResource('tm_sample'),
-            'balance_id' => 'balance_id',
         ];
     }
 
@@ -87,14 +89,16 @@ class StatementTest extends TestCase
         $expectedStatementResource = $this->managedStatementResource($expectedStatementId);
         $this->mockRequest('GET', '/v1/statements/' . $expectedStatementId, [], $expectedStatementResource);
         $statement = Statement::retrieve($expectedStatementId);
+        $this->assertSame($expectedStatementResource['balance_id'], $statement->balance_id);
         $this->assertSame($expectedStatementResource['created'], $statement->created);
         $this->assertSame($expectedStatementId, $statement->id);
-        $this->assertSame($expectedStatementResource['object'], $statement->object);
         $this->assertSame($expectedStatementResource['livemode'], $statement->livemode);
+        $this->assertSame($expectedStatementResource['net'], $statement->net);
+        $this->assertSame($expectedStatementResource['object'], $statement->object);
+        $this->assertSame($expectedStatementResource['tenant_id'], $statement->tenant_id);
         $this->assertSame($expectedStatementResource['title'], $statement->title);
         $this->assertSame($expectedStatementResource['updated'], $statement->updated);
         $this->assertInstanceOf(Term::class, $statement->term);
-        $this->assertSame($expectedStatementResource['balance_id'], $statement->balance_id);
         foreach ($statement->items as $item) {
             $this->assertArrayHasKey('amount', $item);
             $this->assertArrayHasKey('name', $item);
