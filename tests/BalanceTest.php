@@ -156,7 +156,7 @@ class BalanceTest extends TestCase
         $this->assertSame($expectedBalanceResource['statements']['object'], $balance->statements->object);
         $this->assertSame($expectedBalanceResource['statements']['url'], $balance->statements->url);
 
-        foreach($balance->statements->data as $statement) {
+        foreach ($balance->statements->data as $statement) {
             $this->assertInstanceOf(Statement::class, $statement);
         }
     }
