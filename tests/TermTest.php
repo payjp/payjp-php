@@ -18,7 +18,7 @@ class TermTest extends TestCase
         ];
     }
 
-    private function termsResource($ids = [])
+    private function termResources($ids = [])
     {
         return [
             'count' => count($ids),
@@ -50,7 +50,7 @@ class TermTest extends TestCase
     public function testAll()
     {
         $expectedTermIds = ['tm_sample1', 'tm_sample2'];
-        $this->mockRequest('GET', '/v1/terms', [], $this->termsResource($expectedTermIds));
+        $this->mockRequest('GET', '/v1/terms', [], $this->termResources($expectedTermIds));
         $terms = Term::all();
         $this->assertSame(count($expectedTermIds), $terms['count']);
         $this->assertCount(count($expectedTermIds), $terms['data']);
