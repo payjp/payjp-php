@@ -18,21 +18,20 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4242424242424242",
-            "exp_month" => "05",
-            'exp_year' => date('Y') + 1
+                'number' => '4242424242424242',
+                'exp_month' => '05',
+                'exp_year' => date('Y') + 1,
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $c = Charge::create(
-            array(
-                'amount' => 100,
-                'currency' => self::CURRENCY,
-                'card' => $card->id
-            )
-        );
+        $c = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id,
+        ]);
         $this->assertTrue($c->paid);
         $this->assertFalse($c->refunded);
     }
@@ -44,24 +43,22 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4242424242424242",
-            "exp_month" => 5,
-            'exp_year' => date('Y') + 1
+                'number' => '4242424242424242',
+                'exp_month' => 5,
+                'exp_year' => date('Y') + 1,
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $c = Charge::create(
-            array(
-                'amount' => 100,
-                'currency' => self::CURRENCY,
-                'card' => $card->id
-            ),
-            array(
-                'idempotency_key' => self::generateRandomString(),
-            )
-        );
+        $c = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id
+        ], [
+            'idempotency_key' => self::generateRandomString(),
+        ]);
 
         $this->assertTrue($c->paid);
         $this->assertFalse($c->refunded);
@@ -74,21 +71,20 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4242424242424242",
-            "exp_month" => 5,
-            "exp_year" => date('Y') + 1
+                'number' => '4242424242424242',
+                'exp_month' => 5,
+                'exp_year' => date('Y') + 1,
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $c = Charge::create(
-            array(
-                'amount' => 100,
-                'currency' => self::CURRENCY,
-                'card' => $card->id
-            )
-        );
+        $c = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id
+        ]);
         $d = Charge::retrieve($c->id);
         $this->assertSame($d->id, $c->id);
     }
@@ -98,50 +94,40 @@ class ChargeTest extends TestCase
     {
         self::authorizeFromEnv();
 
-        $charges = Charge::all(
-            array(
-                    'limit' => 3,
-                    'offset' => 10
-            )
-        );
+        $charges = Charge::all([
+            'limit' => 3,
+            'offset' => 10
+        ]);
 
         $planID = 'gold-' . self::randomString();
         self::retrieveOrCreatePlan($planID);
 
         $customer = self::createTestCustomer();
 
-        $charge = Charge::create(
-            array(
-                    'amount' => 1000,
-                    'currency' => self::CURRENCY,
-                    'customer' => $customer->id
-            )
-        );
+        $charge = Charge::create([
+            'amount' => 1000,
+            'currency' => self::CURRENCY,
+            'customer' => $customer->id
+        ]);
 
-        $charges_2 = Charge::all(
-            array(
-                    'customer' => $customer->id
-            )
-        );
+        $charges_2 = Charge::all([
+            'customer' => $customer->id
+        ]);
 
         $this->assertSame(1, count($charges_2['data']));
         $this->assertSame($charge->id, $charges_2['data'][0]->id);
 
-        $charge_2 = Charge::create(
-            array(
-                    'amount' => 1500,
-                    'currency' => self::CURRENCY,
-                    'customer' => $customer->id
-            )
-        );
+        $charge_2 = Charge::create([
+            'amount' => 1500,
+            'currency' => self::CURRENCY,
+            'customer' => $customer->id
+        ]);
 
-        $charges_3 = Charge::all(
-            array(
-                    'limit' => 2,
-                    'offset' => 0,
-                    'customer' => $customer->id
-            )
-        );
+        $charges_3 = Charge::all([
+            'limit' => 2,
+            'offset' => 0,
+            'customer' => $customer->id
+        ]);
 
         $this->assertSame(2, count($charges_3['data']));
     }
@@ -153,21 +139,20 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4242424242424242",
-            "exp_month" => 5,
-            "exp_year" => date('Y') + 1
+                'number' => '4242424242424242',
+                'exp_month' => 5,
+                'exp_year' => date('Y') + 1,
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $charge = Charge::create(
-            array(
-                    'amount' => 100,
-                    'currency' => self::CURRENCY,
-                    'card' => $card->id
-            )
-        );
+        $charge = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id
+        ]);
 
         $charge->description = 'foo bar';
         $charge->save();
@@ -184,22 +169,21 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4242424242424242",
-            "exp_month" => 5,
-            "exp_year" => date('Y') + 1
+                'number' => '4242424242424242',
+                'exp_month' => 5,
+                'exp_year' => date('Y') + 1,
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $charge = Charge::create(
-            array(
-                    'amount' => 100,
-                    'currency' => self::CURRENCY,
-                    'card' => $card->id,
-                    'capture' => false
-            )
-        );
+        $charge = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id,
+            'capture' => false
+        ]);
 
         $this->assertFalse($charge->captured);
 
@@ -215,22 +199,21 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4242424242424242",
-            "exp_month" => 5,
-            "exp_year" => date('Y') + 1
+                'number' => '4242424242424242',
+                'exp_month' => 5,
+                'exp_year' => date('Y') + 1,
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $charge = Charge::create(
-            array(
-                    'amount' => 100,
-                    'currency' => self::CURRENCY,
-                    'card' => $card->id,
-                    'capture' => false
-            )
-        );
+        $charge = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id,
+            'capture' => false
+        ]);
 
         $this->assertFalse($charge->captured);
 
@@ -246,30 +229,27 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4242424242424242",
-            "exp_month" => 5,
-            "exp_year" => date('Y') + 1
+                'number' => '4242424242424242',
+                'exp_month' => 5,
+                'exp_year' => date('Y') + 1,
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $charge = Charge::create(
-            array(
-                    'amount' => 100,
-                    'currency' => self::CURRENCY,
-                    'card' => $card->id,
-            )
-        );
+        $charge = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id,
+        ]);
 
         $this->assertTrue($charge->captured);
 
-        $redundChargePart = $charge->refund(
-            array(
-                    'amount' => 50,
-                    'refund_reason' => 'foo bar 1'
-            )
-        );
+        $redundChargePart = $charge->refund([
+            'amount' => 50,
+            'refund_reason' => 'foo bar 1'
+        ]);
 
         $this->assertTrue($redundChargePart->refunded);
         $this->assertSame('foo bar 1', $redundChargePart->refund_reason);
@@ -278,11 +258,9 @@ class ChargeTest extends TestCase
         $this->assertSame('foo bar 1', $charge->refund_reason);
         $this->assertSame(50, $charge->amount_refunded);
 
-        $refundChargeAll = $charge->refund(
-            array(
-                    'refund_reason' => 'foo bar 2'
-            )
-        );
+        $refundChargeAll = $charge->refund([
+            'refund_reason' => 'foo bar 2'
+        ]);
 
         $this->assertTrue($refundChargeAll->refunded);
         $this->assertSame('foo bar 2', $refundChargeAll->refund_reason);
@@ -294,27 +272,26 @@ class ChargeTest extends TestCase
 
     public function testInvalidCard()
     {
-        $this->expectException("\Payjp\Error\Card");
+        $this->expectException('\Payjp\Error\Card');
 
         self::authorizeFromEnv();
 
         $params =  [
             'card' => [
-            "number" => "4242424242424241",
-            "exp_month" => 5,
-            "exp_year" => date('Y') + 1
+                'number' => '4242424242424241',
+                'exp_month' => 5,
+                'exp_year' => date('Y') + 1,
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        Charge::create(
-            array(
-                    'amount' => 100,
-                    'currency' => self::CURRENCY,
-                    'card' => $card->id
-            )
-        );
+        Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id
+        ]);
     }
 
 
@@ -324,23 +301,22 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4000000000000070",
-            "exp_month" => '05',
-            'exp_year' => (date('Y') + 1)
+                'number' => '4000000000000070',
+                'exp_month' => '05',
+                'exp_year' => (date('Y') + 1),
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $ch = Charge::create(
-            array(
-                    'amount' => 100,
-                    'currency' => self::CURRENCY,
-                    'card' => $card->id
-            )
-        );
+        $ch = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id
+        ]);
 
-        $this->assertSame("failed", $ch->card->address_zip_check);
+        $this->assertSame('failed', $ch->card->address_zip_check);
     }
 
     public function testInvalidCvcTest()
@@ -349,23 +325,22 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4000000000000100",
-            "exp_month" => '05',
-            'exp_year' => (date('Y') + 1)
+                'number' => '4000000000000100',
+                'exp_month' => '05',
+                'exp_year' => (date('Y') + 1),
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $ch = Charge::create(
-            array(
-                    'amount' => 100,
-                    'currency' => self::CURRENCY,
-                    'card' => $card->id
-            )
-        );
+        $ch = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id
+        ]);
 
-        $this->assertSame("failed", $ch->card->cvc_check);
+        $this->assertSame('failed', $ch->card->cvc_check);
     }
 
     public function testUnavailableCvcTest()
@@ -374,22 +349,21 @@ class ChargeTest extends TestCase
 
         $params =  [
             'card' => [
-            "number" => "4000000000000150",
-            "exp_month" => '05',
-            'exp_year' => (date('Y') + 1)
+                'number' => '4000000000000150',
+                'exp_month' => '05',
+                'exp_year' => (date('Y') + 1),
+                'cvc' => '123',
             ]
         ];
 
-        $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
+        $card = Token::create($params, ['payjp_direct_token_generate' => 'true']);
 
-        $ch = Charge::create(
-            array(
-                    'amount' => 100,
-                    'currency' => self::CURRENCY,
-                    'card' => $card->id
-            )
-        );
+        $ch = Charge::create([
+            'amount' => 100,
+            'currency' => self::CURRENCY,
+            'card' => $card->id
+        ]);
 
-        $this->assertSame("unavailable", $ch->card->cvc_check);
+        $this->assertSame('unavailable', $ch->card->cvc_check);
     }
 }
