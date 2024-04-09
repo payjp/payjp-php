@@ -30,70 +30,72 @@ class BalanceTest extends TestCase
             'statements' => [
                 'count' => 2,
                 'data' => [
-                    'balance_id' => $id,
-                    'term' => $this->termResource('tm_sample1'),
-                    'created' => 1695892351,
-                    'id' => 'st_sample1',
-                    'items' => [
-                        [
-                            'amount' => 25,
-                            'name' => 'チャージバックによる手数料返還',
-                            'subject' => 'chargeback_fee_offset',
-                            'tax_rate' => '0.00'
-                        ], [
-                            'amount' => -775,
-                            'name' => 'チャージバック',
-                            'subject' => 'chargeback',
-                            'tax_rate' => '0.00'
-                        ], [
-                            'amount' => 36,
-                            'name' => '返金による手数料返還',
-                            'subject' => 'refund_fee_offset',
-                            'tax_rate' => '0.00'
-                        ], [
-                            'amount' => -1800,
-                            'name' => '返金',
-                            'subject' => 'gross_refund',
-                            'tax_rate' => '0.00'
-                        ], [
-                            'amount' => -75,
-                            'name' => '決済手数料',
-                            'subject' => 'fee',
-                            'tax_rate' => '0.00'
-                        ], [
-                            'amount' => 3125,
-                            'name' => '売上',
-                            'subject' => 'gross_sales',
-                            'tax_rate' => '0.00'
-                        ]
+                    [
+                        'balance_id' => $id,
+                        'term' => $this->termResource('tm_sample1'),
+                        'created' => 1695892351,
+                        'id' => 'st_sample1',
+                        'items' => [
+                            [
+                                'amount' => 25,
+                                'name' => 'チャージバックによる手数料返還',
+                                'subject' => 'chargeback_fee_offset',
+                                'tax_rate' => '0.00'
+                            ], [
+                                'amount' => -775,
+                                'name' => 'チャージバック',
+                                'subject' => 'chargeback',
+                                'tax_rate' => '0.00'
+                            ], [
+                                'amount' => 36,
+                                'name' => '返金による手数料返還',
+                                'subject' => 'refund_fee_offset',
+                                'tax_rate' => '0.00'
+                            ], [
+                                'amount' => -1800,
+                                'name' => '返金',
+                                'subject' => 'gross_refund',
+                                'tax_rate' => '0.00'
+                            ], [
+                                'amount' => -75,
+                                'name' => '決済手数料',
+                                'subject' => 'fee',
+                                'tax_rate' => '0.00'
+                            ], [
+                                'amount' => 3125,
+                                'name' => '売上',
+                                'subject' => 'gross_sales',
+                                'tax_rate' => '0.00'
+                            ]
+                        ],
+                        'net' => 536,
+                        'object' => 'statement',
+                        'livemode' => true,
+                        'title' => null,
+                        'tenant_id' => null,
+                        'type' => 'sales',
+                        'updated' => 1695892351
+                    ], [
+                        'balance_id' => $id,
+                        'term' => null,
+                        'created' => 1695892350,
+                        'id' => 'st_sample2',
+                        'items' => [
+                            [
+                                'amount' => -10000,
+                                'name' => 'プロプラン利用料',
+                                'subject' => 'proplan',
+                                'tax_rate' => '10.00'
+                            ]
+                        ],
+                        'net' => -10000,
+                        'object' => 'statement',
+                        'livemode' => true,
+                        'title' => 'プロプラン月額料金',
+                        'tenant_id' => null,
+                        'type' => 'service_fee',
+                        'updated' => 1695892350
                     ],
-                    'net' => 536,
-                    'object' => 'statement',
-                    'livemode' => true,
-                    'title' => null,
-                    'tenant_id' => null,
-                    'type' => 'sales',
-                    'updated' => 1695892351
-                ], [
-                    'balance_id' => $id,
-                    'term' => null,
-                    'created' => 1695892350,
-                    'id' => 'st_sample2',
-                    'items' => [
-                        [
-                            'amount' => -10000,
-                            'name' => 'プロプラン利用料',
-                            'subject' => 'proplan',
-                            'tax_rate' => '10.00'
-                        ]
-                    ],
-                    'net' => -10000,
-                    'object' => 'statement',
-                    'livemode' => true,
-                    'title' => 'プロプラン月額料金',
-                    'tenant_id' => null,
-                    'type' => 'service_fee',
-                    'updated' => 1695892350
                 ],
                 'has_more' => false,
                 'object' => 'list',
@@ -154,7 +156,9 @@ class BalanceTest extends TestCase
         $this->assertSame($expectedBalanceResource['statements']['object'], $balance->statements->object);
         $this->assertSame($expectedBalanceResource['statements']['url'], $balance->statements->url);
 
-        $this->assertInstanceOf(Statement::class, $balance->statements->data);
+        foreach($balance->statements->data as $statement) {
+            $this->assertInstanceOf(Statement::class, $statement);
+        }
     }
 
     public function testAll()
