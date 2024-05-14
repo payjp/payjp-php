@@ -4,6 +4,15 @@ namespace Payjp;
 
 class Balance extends ApiResource
 {
+    public $statementUrls;
+
+    public function __construct($id = null, $opts = null)
+    {
+        parent::__construct($id, $opts);
+        $this->statementUrls = new StatementUrl(null, $opts);
+        $this->statementUrls->_url = $this->instanceUrl() . '/statement_urls';
+    }
+
     /**
      * @param string $id The ID of the balance to retrieve.
      * @param array|string|null $opts
