@@ -14,8 +14,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     protected $mock;
 
-    public $call;
-
     protected static function authorizeFromEnv()
     {
         $apiKey = getenv('PAYJP_API_KEY');
@@ -42,25 +40,28 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->setMaxRetryForCi();
         ApiRequestor::setHttpClient(HttpClient\CurlClient::instance());
         $this->mock = null;
-        $this->call = 0;
     }
 
     protected function mockRequest($method, $path, $params = array(), $return = array('id' => 'myId'))
     {
         $mock = $this->setUpMockRequest();
-        $mock->expects($this->at($this->call++))
-             ->method('request')
-                 ->with(strtolower($method), 'https://api.pay.jp' . $path, $this->anything(), $params, false)
-                 ->willReturn(array(json_encode($return), 200));
+        $mock->expects($this->once())
+            ->method('request')
+            ->with(
+                strtolower($method),
+                'https://api.pay.jp' . $path,
+                $this->anything(),
+                $params,
+                false
+            )
+            ->willReturn(array(json_encode($return), 200));
     }
 
     protected function setUpMockRequest()
     {
-        if (!$this->mock) {
-            self::authorizeFromEnv();
-            $this->mock = $this->createMock('\Payjp\HttpClient\ClientInterface');
-            ApiRequestor::setHttpClient($this->mock);
-        }
+        self::authorizeFromEnv();
+        $this->mock = $this->createMock('\Payjp\HttpClient\ClientInterface');
+        ApiRequestor::setHttpClient($this->mock);
         return $this->mock;
     }
 
