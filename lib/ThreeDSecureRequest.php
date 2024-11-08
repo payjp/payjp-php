@@ -30,4 +30,15 @@ class ThreeDSecureRequest extends ApiResource
     {
         return self::_all($params, $opts);
     }
+
+    /**
+     * @param array|null $params
+     * @param array|string|null $opts
+     *
+     * @return ThreeDSecureRequest The created three d secure request.
+     */
+    public static function create($params = null, $opts = null)
+    {
+        return self::_create($params, $opts);
+    }
 }
