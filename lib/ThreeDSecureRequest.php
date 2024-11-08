@@ -10,7 +10,7 @@ class ThreeDSecureRequest extends ApiResource
     }
 
     /**
-     * @param string $id The ID of the three d secure to retrieve.
+     * @param string $id The ID of the three d secure request to retrieve.
      * @param array|string|null $opts
      *
      * @return ThreeDSecureRequest
@@ -24,7 +24,7 @@ class ThreeDSecureRequest extends ApiResource
      * @param array|null $params
      * @param array|string|null $opts
      *
-     * @return array An array of ThreeDSecures.
+     * @return array An array of ThreeDSecureRequests.
      */
     public static function all($params = null, $opts = null)
     {
