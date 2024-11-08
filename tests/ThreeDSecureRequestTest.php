@@ -66,4 +66,17 @@ class ThreeDSecureRequestTest extends TestCase
         $this->assertSame($expectedThreeDSecureRequestIds[0], $threeDSecureRequests['data'][0]->id);
         $this->assertSame($expectedThreeDSecureRequestIds[1], $threeDSecureRequests['data'][1]->id);
     }
+
+    public function testCreate()
+    {
+        $expectedThreeDSecureRequestId = 'tdsr_125192559c91c4011c1ff56f50a';
+        $expectedCustomerCardId = 'car_xxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+        $params = [
+            'resource_id' => $expectedCustomerCardId
+        ];
+        $this->mockRequest('POST', '/v1/three_d_secure_requests', $params, $this->managedThreeDSecureRequestResource($expectedThreeDSecureRequestId));
+        $threeDSecureRequest = ThreeDSecureRequest::create($params);
+        $this->assertSame($expectedThreeDSecureRequestId, $threeDSecureRequest->id);
+        $this->assertSame($expectedCustomerCardId, $threeDSecureRequest->resource_id);
+    }
 }
