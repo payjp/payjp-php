@@ -48,5 +48,6 @@ require(dirname(__FILE__) . '/lib/Subscription.php');
 require(dirname(__FILE__) . '/lib/Tenant.php');
 require(dirname(__FILE__) . '/lib/TenantTransfer.php');
 require(dirname(__FILE__) . '/lib/Term.php');
+require(dirname(__FILE__) . '/lib/ThreeDSecureRequest.php');
 require(dirname(__FILE__) . '/lib/Token.php');
 require(dirname(__FILE__) . '/lib/Transfer.php');
