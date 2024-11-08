@@ -19,4 +19,15 @@ class ThreeDSecureRequest extends ApiResource
     {
         return self::_retrieve($id, $opts);
     }
+
+    /**
+     * @param array|null $params
+     * @param array|string|null $opts
+     *
+     * @return array An array of ThreeDSecures.
+     */
+    public static function all($params = null, $opts = null)
+    {
+        return self::_all($params, $opts);
+    }
 }

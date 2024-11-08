@@ -23,6 +23,19 @@ class ThreeDSecureRequestTest extends TestCase
         ];
     }
 
+    private function managedThreeDSecureRequestResources($ids)
+    {
+        return [
+            'count' => count($ids),
+            'data' => array_map(function ($id) {
+                return $this->managedThreeDSecureRequestResource($id);
+            }, $ids),
+            'has_more' => false,
+            'object' => 'list',
+            'url' => '/v1/three_d_secure_requests'
+        ];
+    }
+
     public function testRetrieve()
     {
         $expectedThreeDSecureRequestId = 'tdsr_125192559c91c4011c1ff56f50a';
@@ -41,5 +54,16 @@ class ThreeDSecureRequestTest extends TestCase
         $this->assertSame($expectedThreeDSecureRequestResource['state'], $threeDSecureRequest->state);
         $this->assertSame($expectedThreeDSecureRequestResource['tenant_id'], $threeDSecureRequest->tenant_id);
         $this->assertSame($expectedThreeDSecureRequestResource['three_d_secure_status'], $threeDSecureRequest->three_d_secure_status);
+    }
+
+    public function testAll()
+    {
+        $expectedThreeDSecureRequestIds = array('tdsr_125192559c91c4011c1ff56f50a', 'tdsr_125192559c91c4011c1ff56f50b');
+        $this->mockRequest('GET', '/v1/three_d_secure_requests', array(), $this->managedThreeDSecureRequestResources($expectedThreeDSecureRequestIds));
+        $threeDSecureRequests = ThreeDSecureRequest::all();
+        $this->assertSame(count($expectedThreeDSecureRequestIds), $threeDSecureRequests['count']);
+        $this->assertCount(count($expectedThreeDSecureRequestIds), $threeDSecureRequests['data']);
+        $this->assertSame($expectedThreeDSecureRequestIds[0], $threeDSecureRequests['data'][0]->id);
+        $this->assertSame($expectedThreeDSecureRequestIds[1], $threeDSecureRequests['data'][1]->id);
     }
 }
