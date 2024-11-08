@@ -187,8 +187,9 @@ class BalanceTest extends TestCase
     {
         $expectedBalanceId = 'ba_sample1';
         $this->mockRequest('GET', '/v1/balances/' . $expectedBalanceId, array(), $this->balanceResource($expectedBalanceId));
+        $statements = Balance::retrieve($expectedBalanceId);
         $this->mockRequest('POST', '/v1/balances/' . $expectedBalanceId . '/statement_urls', array(), $this->statementUrlResource());
-        $statementUrls = Balance::retrieve($expectedBalanceId)->statementUrls->create();
+        $statementUrls = $statements->statementUrls->create();
         $this->assertSame('statement_url', $statementUrls->object);
         $this->assertTrue($statementUrls->expires > 0);
         $this->assertNotEmpty($statementUrls->url);

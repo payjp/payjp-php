@@ -60,8 +60,9 @@ class TenantTransferTest extends TestCase
         $expectedTenantId = 'tr_8f0c0fe2c9f8a47f9d18f03959bxx';
         $expectedTenantTransferId = 'ten_tr_23748b8c95c79edff22a8b7b795xx';
         $this->mockRequest('GET', '/v1/tenant_transfers/' . $expectedTenantTransferId, array(), $this->managedTenantTransferResource($expectedTenantId, $expectedTenantTransferId));
+        $statements = TenantTransfer::retrieve($expectedTenantTransferId);
         $this->mockRequest('POST', '/v1/tenant_transfers/' . $expectedTenantTransferId . '/statement_urls', array(), $this->managedDownloadUrlResource());
-        $statementUrls = TenantTransfer::retrieve($expectedTenantTransferId)->statementUrls->create();
+        $statementUrls = $statements->statementUrls->create();
         $this->assertSame('statement_url', $statementUrls->object);
         $this->assertTrue($statementUrls->expires > 0);
         $this->assertNotEmpty($statementUrls->url);

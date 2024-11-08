@@ -24,6 +24,7 @@ abstract class Util
         'tenant_transfer' => \Payjp\TenantTransfer::class,
         'term' => \Payjp\Term::class,
         'transfer' => \Payjp\Transfer::class,
+        'three_d_secure_request' => \Payjp\ThreeDSecureRequest::class,
     );
 
     /**

@@ -44,12 +44,16 @@ class ApiRequestorTest extends TestCase
 
     private function setUpResponses($responses)
     {
+        $userCallCount = 0;
         $mock = $this->setUpMockRequest();
-        for ($i = 0; $i < count($responses); $i++) {
-            $mock->expects($this->at($i))
+        $mock->expects($this->exactly(count($responses)))
             ->method('request')
-            ->willReturn(array(json_encode($responses[$i]['rbody']), $responses[$i]['rcode']));
-        }
+            // $userCallCount を使って、responses の中から適切なものを選択するために、参照渡しで渡す。
+            ->willReturnCallback(static function () use ($responses, &$userCallCount) {
+                $userCallCount++;
+                $response = $responses[$userCallCount - 1];
+                return array(json_encode($response['rbody']), $response['rcode']);
+            });
     }
 
     // _encodeObjects
