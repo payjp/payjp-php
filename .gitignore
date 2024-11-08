@@ -20,3 +20,6 @@ composer.lock
 
 # Ignore PHPUnit coverage file
 clover.xml
+
+# Ignore PHPUnit cache file
+.phpunit.result.cache
