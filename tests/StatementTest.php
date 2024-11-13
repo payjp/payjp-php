@@ -124,8 +124,9 @@ class StatementTest extends TestCase
     {
         $expectedStatementId = 'st_0d08780a33ab77f1c911a1b7286bd';
         $this->mockRequest('GET', '/v1/statements/' . $expectedStatementId, array(), $this->managedStatementResource($expectedStatementId));
+        $statements = Statement::retrieve($expectedStatementId);
         $this->mockRequest('POST', '/v1/statements/' . $expectedStatementId . '/statement_urls', array(), $this->managedDownloadUrlResource());
-        $statementUrls = Statement::retrieve($expectedStatementId)->statementUrls->create();
+        $statementUrls = $statements->statementUrls->create();
         $this->assertSame('statement_url', $statementUrls->object);
         $this->assertTrue($statementUrls->expires > 0);
         $this->assertNotEmpty($statementUrls->url);
