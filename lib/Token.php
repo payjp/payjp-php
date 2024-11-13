@@ -25,4 +25,18 @@ class Token extends ApiResource
     {
         return self::_create($params, $opts);
     }
+
+    /**
+     * @param array|null $params
+     * @param array|string|null $options
+     *
+     * @return Token The paid token.
+     */
+    public function tdsFinish($params = null, $options = null)
+    {
+        $url = $this->instanceUrl() . '/tds_finish';
+        list($response, $opts) = $this->_request('post', $url, $params, $options);
+        $this->refreshFrom($response, $opts);
+        return $this;
+    }
 }
