@@ -319,3 +319,11 @@ $params = [
     \Payjp\Payjp::setApiKey("sk_test_c62fade9d045b54cd76d7036");
 
     \Payjp\Account::retrieve();
+
+## Metadataの更新
+
+    $cus->metadata = ['key' => 'value'];
+    $cus->save();
+
+    $cus->metadata->key = 'value';
+    $cus->save();
