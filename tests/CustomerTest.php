@@ -197,22 +197,35 @@ class CustomerTest extends TestCase
 
     public function testUpdateDescriptionEmpty()
     {
-        $this->expectException('\InvalidArgumentException');
         $mockCustomerData = $this->mockCustomerData('cus_test_1', ['description' => '123']);
+        $mockCustomerData2 = $this->mockCustomerData('cus_test_1', ['description' => '']);
         $mock = $this->setUpMockRequest();
-        $mock->expects($this->once())
+        $mock->expects($this->exactly(2))
             ->method('request')
-            ->with(
-                'get',
-                'https://api.pay.jp/v1/customers/cus_test_1',
-                $this->anything(),
-                [],
-                false
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'post',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    ['description' => ''],
+                    false
+                ]
             )
-            ->willReturn([json_encode($mockCustomerData), 200]);
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode($mockCustomerData2), 200]
+            );
         $customer = Customer::retrieve('cus_test_1');
         $customer->description = '';
         $customer->save();
+        $this->assertSame('', $customer->description);
     }
 
     public function testUpdateDescriptionNull()
