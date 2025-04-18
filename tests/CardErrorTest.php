@@ -16,7 +16,10 @@ class CardErrorTest extends TestCase
                 'cvc' => '314'
             ]
         ];
-
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->once())
+            ->method('request')
+            ->willThrowException(new Error\Card('Expired card', null, 'expired_card', 402, null, null));
         try {
             Token::create($params, ['payjp_direct_token_generate' => 'true']);
         } catch (Error\Card $e) {

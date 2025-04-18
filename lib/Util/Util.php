@@ -12,6 +12,7 @@ abstract class Util
         'balance' => \Payjp\Balance::class,
         'card' => \Payjp\Card::class,
         'charge' => \Payjp\Charge::class,
+        'account' => \Payjp\Account::class,
         'customer' => \Payjp\Customer::class,
         'event' => \Payjp\Event::class,
         'list' => \Payjp\Collection::class,

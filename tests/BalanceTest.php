@@ -165,8 +165,16 @@ class BalanceTest extends TestCase
         $this->assertSame($expectedBalanceResource['statements']['object'], $balance->statements->object);
         $this->assertSame($expectedBalanceResource['statements']['url'], $balance->statements->url);
 
-        foreach ($balance->statements->data as $statement) {
+        $expectedStatementsData = $expectedBalanceResource['statements']['data'];
+        foreach ($balance->statements->data as $index => $statement) {
             $this->assertInstanceOf(Statement::class, $statement);
+            $this->assertSame($expectedStatementsData[$index]['id'], $statement->id);
+            if (isset($expectedStatementsData[$index]['term']) && $expectedStatementsData[$index]['term'] !== null) {
+                $this->assertInstanceOf(PayjpObject::class, $statement->term); // Assuming Term becomes PayjpObject
+                $this->assertSame($expectedStatementsData[$index]['term']['id'], $statement->term->id);
+            } else {
+                $this->assertNull($statement->term);
+            }
         }
     }
 
