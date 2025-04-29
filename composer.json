@@ -33,9 +33,10 @@
     }
   },
   "scripts": {
-     "test": [
-       "phpcs --standard=PSR2 -n lib tests *.php",
-       "phpunit"
-     ]
+    "format": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --config=.php-cs-fixer.php lib tests *.php",
+    "test": [
+      "phpcs --standard=PSR2 -n lib tests *.php",
+      "phpunit"
+    ]
   }
 }
