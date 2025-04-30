@@ -4,7 +4,7 @@ namespace Payjp;
 
 abstract class ApiResource extends PayjpObject
 {
-    private static $HEADERS_TO_PERSIST = array('Payjp-Account' => true, 'Payjp-Version' => true);
+    private static $HEADERS_TO_PERSIST = ['Payjp-Account' => true, 'Payjp-Version' => true];
 
     /**
      * @return ApiResource The refreshed resource.
@@ -95,7 +95,7 @@ abstract class ApiResource extends PayjpObject
      *
      * @return list(array, RequestOptions)
      */
-    protected function _request($method, $url, $params = array(), $options = null)
+    protected function _request($method, $url, $params = [], $options = null)
     {
         $opts = $this->_opts->merge($options);
         return static::_staticRequest($method, $url, $params, $opts);
@@ -111,7 +111,7 @@ abstract class ApiResource extends PayjpObject
                 unset($opts->headers[$k]);
             }
         }
-        return array($response, $opts);
+        return [$response, $opts];
     }
 
     protected static function _retrieve($id, $options = null)

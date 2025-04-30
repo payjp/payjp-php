@@ -4,7 +4,6 @@ namespace Payjp;
 
 class ThreeDSecureRequestTest extends TestCase
 {
-
     private function managedThreeDSecureRequestResource($id)
     {
         return [
@@ -58,8 +57,8 @@ class ThreeDSecureRequestTest extends TestCase
 
     public function testAll()
     {
-        $expectedThreeDSecureRequestIds = array('tdsr_125192559c91c4011c1ff56f50a', 'tdsr_125192559c91c4011c1ff56f50b');
-        $this->mockRequest('GET', '/v1/three_d_secure_requests', array(), $this->managedThreeDSecureRequestResources($expectedThreeDSecureRequestIds));
+        $expectedThreeDSecureRequestIds = ['tdsr_125192559c91c4011c1ff56f50a', 'tdsr_125192559c91c4011c1ff56f50b'];
+        $this->mockRequest('GET', '/v1/three_d_secure_requests', [], $this->managedThreeDSecureRequestResources($expectedThreeDSecureRequestIds));
         $threeDSecureRequests = ThreeDSecureRequest::all();
         $this->assertSame(count($expectedThreeDSecureRequestIds), $threeDSecureRequests['count']);
         $this->assertCount(count($expectedThreeDSecureRequestIds), $threeDSecureRequests['data']);

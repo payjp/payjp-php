@@ -7,7 +7,7 @@
 PHP 5.6 and later.
 
 > Even if it is not a corresponding version, it may work, but it does not support it.
-  Due to the PHP [END OF LIFE](http://php.net/supported-versions.php) cycle. 
+  Due to the PHP [END OF LIFE](http://php.net/supported-versions.php) cycle.
 
 ## Composer
 
@@ -55,12 +55,12 @@ echo $charge->amount; // 2000
 ## Retry on HTTP Status Code 429
 
 - See [Rate Limit Guideline](https://pay.jp/docs/guideline-rate-limit#2-%E3%83%AA%E3%83%88%E3%83%A9%E3%82%A4)
-- When you exceeded rate-limit, you can retry request by setting `$maxRetry`  
+- When you exceeded rate-limit, you can retry request by setting `$maxRetry`
   like `\Payjp\Payjp::setMaxRetry(3);` .
-- The retry interval base value is `$retryInitialDelay`  
-  Adjust the value like `\Payjp\Payjp::setRetryInitialDelay(4);`  
+- The retry interval base value is `$retryInitialDelay`
+  Adjust the value like `\Payjp\Payjp::setRetryInitialDelay(4);`
   The smaller is shorter.
-- The retry interval calcurating is based on "Exponential backoff with equal jitter" algorithm.  
+- The retry interval calcurating is based on "Exponential backoff with equal jitter" algorithm.
   See https://aws.amazon.com/jp/blogs/architecture/exponential-backoff-and-jitter/
 
 ## Logging
@@ -78,7 +78,9 @@ echo $charge->amount; // 2000
 
 - When you access inaccessible or non-existing property
 
-## Tests
+## Development
+
+### Running Tests
 
 In order to run tests first install [PHPUnit](http://packagist.org/packages/phpunit/phpunit) via [Composer](http://getcomposer.org/):
 
@@ -87,3 +89,17 @@ In order to run tests first install [PHPUnit](http://packagist.org/packages/phpu
 To run the test suite:
 
     ./vendor/bin/phpunit
+
+You can also use Composer to run the tests:
+
+    composer test
+
+This will run both the code style checks (PSR2) and the PHPUnit tests.
+
+### Code Formatting
+
+To format the code according to our standards:
+
+    composer fix
+
+This command requires PHP 7.4 or higher and will automatically fix coding style issues using PHP-CS-Fixer.

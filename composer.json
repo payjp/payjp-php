@@ -36,6 +36,16 @@
      "test": [
        "phpcs --standard=PSR2 -n lib tests *.php",
        "phpunit"
+     ],
+     "fix": [
+       "@php -r \"if (PHP_VERSION_ID < 70400) { echo 'PHP 7.4 or higher is required. Current version: ' . PHP_VERSION . PHP_EOL; exit(1); }\"",
+       "PHP_CS_FIXER_IGNORE_ENV=1 ./vendor/bin/php-cs-fixer fix --allow-risky=yes"
      ]
+  },
+  "config": {
+    "platform-check": false
+  },
+  "suggest": {
+    "friendsofphp/php-cs-fixer": "Required for the fix command (requires PHP >= 7.4)"
   }
 }

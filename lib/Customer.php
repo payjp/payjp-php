@@ -12,7 +12,7 @@ class Customer extends ApiResource
                 . "would be: \"Payjp\\Charge::create(array('amount' => 100, "
                 . "'currency' => 'usd', 'card' => array('number' => "
                 . "4242424242424242, 'exp_month' => 5, 'exp_year' => 2015)))\")";
-                    throw new Error\Api($message);
+            throw new Error\Api($message);
         }
     }
     /**
@@ -77,7 +77,7 @@ class Customer extends ApiResource
     public function charges($params = null)
     {
         if (!$params) {
-            $params = array();
+            $params = [];
         }
         $params['customer'] = $this->id;
         $charges = Charge::all($params, $this->_opts);

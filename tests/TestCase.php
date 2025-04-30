@@ -42,7 +42,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $this->mock = null;
     }
 
-    protected function mockRequest($method, $path, $params = array(), $return = array('id' => 'myId'))
+    protected function mockRequest($method, $path, $params = [], $return = ['id' => 'myId'])
     {
         $mock = $this->setUpMockRequest();
         $mock->expects($this->once())
@@ -54,7 +54,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
                 $params,
                 false
             )
-            ->willReturn(array(json_encode($return), 200));
+            ->willReturn([json_encode($return), 200]);
     }
 
     protected function setUpMockRequest()
@@ -68,7 +68,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Create a valid test customer.
      */
-    protected static function createTestCustomer(array $attributes = array())
+    protected static function createTestCustomer(array $attributes = [])
     {
         self::authorizeFromEnv();
 
@@ -84,9 +84,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $card = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
 
         return Customer::create(
-            $attributes + array(
+            $attributes + [
                 'card' => $card
-            )
+            ]
         );
     }
 
@@ -99,7 +99,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $chars = 'abcdefghijklmnopqrstuvwxyz';
         $str = '';
         for ($i = 0; $i < 10; $i++) {
-            $str .= $chars[rand(0, strlen($chars)-1)];
+            $str .= $chars[rand(0, strlen($chars) - 1)];
         }
 
         return $str;
@@ -117,13 +117,13 @@ class TestCase extends \PHPUnit\Framework\TestCase
             $plan = Plan::retrieve($id);
         } catch (Error\InvalidRequest $exception) {
             $plan = Plan::create(
-                array(
+                [
                     'id' => $id,
                     'amount' => 500,
                     'currency' => self::CURRENCY,
                     'interval' => 'month',
                     'name' => 'Gold Test Plan',
-                )
+                ]
             );
         }
         return $plan;
