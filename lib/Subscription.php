@@ -14,7 +14,7 @@ class Subscription extends ApiResource
     {
         return self::_create($params, $options);
     }
-    
+
     /**
      * @param string $id The ID of the subscription to retrieve.
      * @param array|string|null $options
@@ -25,7 +25,7 @@ class Subscription extends ApiResource
     {
         return self::_retrieve($id, $options);
     }
-    
+
     /**
      * @param array|null $params
      * @param array|string|null $options
@@ -36,13 +36,13 @@ class Subscription extends ApiResource
     {
         return self::_all($params, $options);
     }
-    
+
     /**
      * @param array|null $params
      *
      * @return Subscription The deleted subscription.
      */
-    
+
     public function delete($params = null, $opts = null)
     {
         return $this->_delete($params, $opts);
@@ -71,7 +71,7 @@ class Subscription extends ApiResource
         $this->refreshFrom($response, $opts);
         return $this;
     }
-    
+
     /**
      * @param array|null $params
      * @param array|string|null $options
@@ -85,7 +85,7 @@ class Subscription extends ApiResource
         $this->refreshFrom($response, $opts);
         return $this;
     }
-    
+
     /**
      * @param array|null $params
      * @param array|string|null $options

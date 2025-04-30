@@ -22,7 +22,7 @@ class CurlClient implements ClientInterface
     {
         $curl = curl_init();
         $method = strtolower($method);
-        $opts = array();
+        $opts = [];
         if ($method == 'get') {
             if ($hasFile) {
                 throw new Error\Api(
@@ -89,7 +89,7 @@ class CurlClient implements ClientInterface
 
         $rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-        return array($rbody, $rcode);
+        return [$rbody, $rcode];
     }
 
     /**
@@ -142,7 +142,7 @@ class CurlClient implements ClientInterface
             return $arr;
         }
 
-        $r = array();
+        $r = [];
         foreach ($arr as $k => $v) {
             if (is_null($v)) {
                 continue;

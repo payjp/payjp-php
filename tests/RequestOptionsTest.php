@@ -8,66 +8,66 @@ class RequestOptionsTest extends TestCase
     {
         $opts = Util\RequestOptions::parse("foo");
         $this->assertSame("foo", $opts->apiKey);
-        $this->assertSame(array(), $opts->headers);
+        $this->assertSame([], $opts->headers);
     }
 
     public function testNull()
     {
         $opts = Util\RequestOptions::parse(null);
         $this->assertSame(null, $opts->apiKey);
-        $this->assertSame(array(), $opts->headers);
+        $this->assertSame([], $opts->headers);
     }
 
     public function testEmptyArray()
     {
-        $opts = Util\RequestOptions::parse(array());
+        $opts = Util\RequestOptions::parse([]);
         $this->assertSame(null, $opts->apiKey);
-        $this->assertSame(array(), $opts->headers);
+        $this->assertSame([], $opts->headers);
     }
 
     public function testAPIKeyArray()
     {
         $opts = Util\RequestOptions::parse(
-            array(
+            [
                 'api_key' => 'foo',
-            )
+            ]
         );
         $this->assertSame('foo', $opts->apiKey);
-        $this->assertSame(array(), $opts->headers);
+        $this->assertSame([], $opts->headers);
     }
 
     public function testIdempotentKeyArray()
     {
         $opts = Util\RequestOptions::parse(
-            array(
+            [
                 'idempotency_key' => 'foo',
-            )
+            ]
         );
         $this->assertSame(null, $opts->apiKey);
-        $this->assertSame(array('Idempotency-Key' => 'foo'), $opts->headers);
+        $this->assertSame(['Idempotency-Key' => 'foo'], $opts->headers);
     }
 
     public function testLocaleArray()
     {
         $opts = Util\RequestOptions::parse(
-            array(
+            [
                 'locale' => 'ja',
-            )
+            ]
         );
         $this->assertSame(null, $opts->apiKey);
-        $this->assertSame(array('Locale' => 'ja'), $opts->headers);
+        $this->assertSame(['Locale' => 'ja'], $opts->headers);
     }
 
     public function testKeyArray()
     {
         $opts = Util\RequestOptions::parse(
-            array(
+            [
                 'idempotency_key' => 'foo',
                 'api_key' => 'foo'
-            )
+            ]
         );
         $this->assertSame('foo', $opts->apiKey);
-        $this->assertSame(array('Idempotency-Key' => 'foo'), $opts->headers);
+        $this->assertSame(['Idempotency-Key' => 'foo'], $opts->headers);
     }
 
     public function testWrongType()

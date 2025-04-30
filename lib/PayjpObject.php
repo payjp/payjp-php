@@ -3,7 +3,6 @@
 namespace Payjp;
 
 use ArrayAccess;
-use InvalidArgumentException;
 
 class PayjpObject implements ArrayAccess
 {
@@ -20,11 +19,11 @@ class PayjpObject implements ArrayAccess
 
     public static function init()
     {
-        self::$permanentAttributes = new Util\Set(array('_opts', 'id'));
-        self::$nestedUpdatableAttributes = new Util\Set(array(
+        self::$permanentAttributes = new Util\Set(['_opts', 'id']);
+        self::$nestedUpdatableAttributes = new Util\Set([
             'summary', 'accounts_enabled', 'merchant',
                         0, 1, 2, 3, 4 // Max 3, but leave the 4th so errors work properly
-        ));
+        ]);
     }
 
     protected $_opts;
@@ -36,11 +35,11 @@ class PayjpObject implements ArrayAccess
     public function __construct($id = null, $opts = null)
     {
         $this->_opts = $opts ? $opts : new Util\RequestOptions();
-        $this->_values = array();
+        $this->_values = [];
         $this->_unsavedValues = new Util\Set();
         $this->_transientValues = new Util\Set();
 
-        $this->_retrieveOptions = array();
+        $this->_retrieveOptions = [];
         if (is_array($id)) {
             foreach ($id as $key => $value) {
                 if ($key != 'id') {
@@ -84,7 +83,7 @@ class PayjpObject implements ArrayAccess
     {
         if (array_key_exists($k, $this->_values)) {
             return $this->_values[$k];
-        } else if ($this->_transientValues->includes($k)) {
+        } elseif ($this->_transientValues->includes($k)) {
             $class = get_class($this);
             $attrs = join(', ', array_keys($this->_values));
             $message = "Payjp Notice: Undefined property of $class instance: $k. "
@@ -197,7 +196,7 @@ class PayjpObject implements ArrayAccess
      */
     public function serializeParameters()
     {
-        $params = array();
+        $params = [];
         if ($this->_unsavedValues) {
             foreach ($this->_unsavedValues->toArray() as $k) {
                 $v = $this->$k;

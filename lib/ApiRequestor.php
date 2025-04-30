@@ -28,7 +28,7 @@ class ApiRequestor
         } elseif ($d === false) {
             return 'false';
         } elseif (is_array($d)) {
-            $res = array();
+            $res = [];
             foreach ($d as $k => $v) {
                 $res[$k] = self::_encodeObjects($v);
             }
@@ -68,10 +68,10 @@ class ApiRequestor
     public function request($method, $url, $params = null, $headers = null)
     {
         if (!$params) {
-            $params = array();
+            $params = [];
         }
         if (!$headers) {
-            $headers = array();
+            $headers = [];
         }
 
         for ($i = 0; $i <= Payjp::getMaxRetry(); $i++) {
@@ -85,7 +85,7 @@ class ApiRequestor
             }
         }
         $resp = $this->_interpretResponse($rbody, $rcode);
-        return array($resp, $myApiKey);
+        return [$resp, $myApiKey];
     }
 
     /**
@@ -145,18 +145,18 @@ class ApiRequestor
         $params = self::_encodeObjects($params);
         $langVersion = phpversion();
         $uname = php_uname();
-        $ua = array(
+        $ua = [
             'bindings_version' => Payjp::VERSION,
             'lang' => 'php',
             'lang_version' => $langVersion,
             'publisher' => 'payjp',
             'uname' => $uname,
-        );
-        $defaultHeaders = array(
+        ];
+        $defaultHeaders = [
             'X-Payjp-Client-User-Agent' => json_encode($ua),
             'User-Agent' => 'Payjp/v1 PhpBindings/' . Payjp::VERSION,
                 'Authorization' => 'Basic ' . base64_encode($myApiKey.':')
-        );
+        ];
         if (Payjp::$apiVersion) {
             $defaultHeaders['Payjp-Version'] = Payjp::$apiVersion;
         }
@@ -178,7 +178,7 @@ class ApiRequestor
         }
 
         $combinedHeaders = array_merge($defaultHeaders, $headers);
-        $rawHeaders = array();
+        $rawHeaders = [];
 
         foreach ($combinedHeaders as $header => $value) {
             $rawHeaders[] = $header . ': ' . $value;
@@ -191,7 +191,7 @@ class ApiRequestor
             $params,
             $hasFile
         );
-        return array($rbody, $rcode, $myApiKey);
+        return [$rbody, $rcode, $myApiKey];
     }
 
     private function _processResourceParam($resource, $hasCurlFile)

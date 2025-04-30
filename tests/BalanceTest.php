@@ -129,11 +129,11 @@ class BalanceTest extends TestCase
 
     private function statementUrlResource()
     {
-        return array(
+        return [
             'object' => 'statement_url',
             'url' => 'https://pay.jp/_/statements/a845383731564192xxxxxxxxxxxxxxxx',
             'expires' => 1695796301,
-        );
+        ];
     }
 
     public function testRetrieve()
@@ -194,9 +194,9 @@ class BalanceTest extends TestCase
     public function testStatementUrls()
     {
         $expectedBalanceId = 'ba_sample1';
-        $this->mockRequest('GET', '/v1/balances/' . $expectedBalanceId, array(), $this->balanceResource($expectedBalanceId));
+        $this->mockRequest('GET', '/v1/balances/' . $expectedBalanceId, [], $this->balanceResource($expectedBalanceId));
         $statements = Balance::retrieve($expectedBalanceId);
-        $this->mockRequest('POST', '/v1/balances/' . $expectedBalanceId . '/statement_urls', array(), $this->statementUrlResource());
+        $this->mockRequest('POST', '/v1/balances/' . $expectedBalanceId . '/statement_urls', [], $this->statementUrlResource());
         $statementUrls = $statements->statementUrls->create();
         $this->assertSame('statement_url', $statementUrls->object);
         $this->assertTrue($statementUrls->expires > 0);

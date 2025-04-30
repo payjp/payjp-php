@@ -77,11 +77,11 @@ class StatementTest extends TestCase
 
     private function managedDownloadUrlResource()
     {
-        return array(
+        return [
             'object' => 'statement_url',
             'url' => 'https://pay.jp/_/statements/a845383731564192xxxxxxxxxxxxxxxx',
             'expires' => 1695796301,
-        );
+        ];
     }
 
     public function testRetrieve()
@@ -111,8 +111,8 @@ class StatementTest extends TestCase
 
     public function testAll()
     {
-        $expectedStatementIds = array('st_6b7d642291873e7b97e9175d7d6b8', 'st_0d08780a33ab77f1c911a1b7286bd');
-        $this->mockRequest('GET', '/v1/statements', array(), $this->managedStatementResources($expectedStatementIds));
+        $expectedStatementIds = ['st_6b7d642291873e7b97e9175d7d6b8', 'st_0d08780a33ab77f1c911a1b7286bd'];
+        $this->mockRequest('GET', '/v1/statements', [], $this->managedStatementResources($expectedStatementIds));
         $statements = Statement::all();
         $this->assertSame(count($expectedStatementIds), $statements['count']);
         $this->assertCount(count($expectedStatementIds), $statements['data']);
@@ -123,9 +123,9 @@ class StatementTest extends TestCase
     public function testStatementUrls()
     {
         $expectedStatementId = 'st_0d08780a33ab77f1c911a1b7286bd';
-        $this->mockRequest('GET', '/v1/statements/' . $expectedStatementId, array(), $this->managedStatementResource($expectedStatementId));
+        $this->mockRequest('GET', '/v1/statements/' . $expectedStatementId, [], $this->managedStatementResource($expectedStatementId));
         $statements = Statement::retrieve($expectedStatementId);
-        $this->mockRequest('POST', '/v1/statements/' . $expectedStatementId . '/statement_urls', array(), $this->managedDownloadUrlResource());
+        $this->mockRequest('POST', '/v1/statements/' . $expectedStatementId . '/statement_urls', [], $this->managedDownloadUrlResource());
         $statementUrls = $statements->statementUrls->create();
         $this->assertSame('statement_url', $statementUrls->object);
         $this->assertTrue($statementUrls->expires > 0);

@@ -12,7 +12,7 @@ class Account extends ApiResource
             return parent::instanceUrl();
         }
     }
-    
+
     /**
      * @param string|null $id
      * @param array|string|null $opts

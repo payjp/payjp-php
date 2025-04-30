@@ -7,7 +7,7 @@ use Payjp\PayjpObject;
 abstract class Util
 {
     // todo wanna use 'private const' (only PHP >= v7.1.0)
-    private static $types = array(
+    private static $types = [
         'account' => \Payjp\Account::class,
         'application_url' => \Payjp\ApplicationUrl::class,
         'balance' => \Payjp\Balance::class,
@@ -26,7 +26,7 @@ abstract class Util
         'term' => \Payjp\Term::class,
         'transfer' => \Payjp\Transfer::class,
         'three_d_secure_request' => \Payjp\ThreeDSecureRequest::class,
-    );
+    ];
 
     /**
      * Whether the provided array (or other) is a list rather than a dictionary.
@@ -40,7 +40,7 @@ abstract class Util
             return false;
         }
 
-      // TODO: generally incorrect, but it's correct given Payjp's response
+        // TODO: generally incorrect, but it's correct given Payjp's response
         foreach (array_keys($array) as $k) {
             if (!is_numeric($k)) {
                 return false;
@@ -57,7 +57,7 @@ abstract class Util
      */
     public static function convertPayjpObjectToArray($values)
     {
-        $results = array();
+        $results = [];
         foreach ($values as $k => $v) {
             // FIXME: this is an encapsulation violation
             if (is_string($k) && $k[0] == '_') {
@@ -84,7 +84,7 @@ abstract class Util
     public static function convertToPayjpObject($resp, $opts)
     {
         if (self::isList($resp)) {
-            $mapped = array();
+            $mapped = [];
             foreach ($resp as $i) {
                 array_push($mapped, self::convertToPayjpObject($i, $opts));
             }

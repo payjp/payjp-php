@@ -38,7 +38,7 @@ class PayjpObjectTest extends TestCase
     {
         $s = new PayjpObject();
         $s->foo = 'a';
-        $this->assertSame($s->keys(), array('foo'));
+        $this->assertSame($s->keys(), ['foo']);
     }
 
     public function testToArray()

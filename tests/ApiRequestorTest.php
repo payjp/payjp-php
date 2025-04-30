@@ -28,19 +28,19 @@ class ApiRequestorTest extends TestCase
         Payjp::setRetryMaxDelay(32);
     }
 
-    private $errorResponse = array('rcode'=>500, 'rbody'=>array('error' => array(
+    private $errorResponse = ['rcode' => 500, 'rbody' => ['error' => [
         "code" => "payjp_wrong",
         "message" => "An unexpected error occurred.",
         "status" => 500,
         "type" => "server_error",
-    )));
-    private $rateLimitResponse = array('rcode'=>429, 'rbody'=>array('error' => array(
+    ]]];
+    private $rateLimitResponse = ['rcode' => 429, 'rbody' => ['error' => [
         "code" => "over_capacity",
         "message" => "The service is over capacity. Please try again later.",
         "status" => 429,
         "type" => "client_error",
-    )));
-    private $successResponse = array('rcode'=>200, 'rbody'=>array('data'=>array()));
+    ]]];
+    private $successResponse = ['rcode' => 200, 'rbody' => ['data' => []]];
 
     private function setUpResponses($responses)
     {
@@ -52,7 +52,7 @@ class ApiRequestorTest extends TestCase
             ->willReturnCallback(static function () use ($responses, &$userCallCount) {
                 $userCallCount++;
                 $response = $responses[$userCallCount - 1];
-                return array(json_encode($response['rbody']), $response['rcode']);
+                return [json_encode($response['rbody']), $response['rcode']];
             });
     }
 
@@ -64,26 +64,26 @@ class ApiRequestorTest extends TestCase
         $method = $reflector->getMethod('_encodeObjects');
         $method->setAccessible(true);
 
-        $a = array('customer' => new Customer('abcd'));
+        $a = ['customer' => new Customer('abcd')];
         $enc = $method->invoke(null, $a);
-        $this->assertSame($enc, array('customer' => 'abcd'));
+        $this->assertSame($enc, ['customer' => 'abcd']);
 
         // Preserves UTF-8
-        $v = array('customer' => "☃");
+        $v = ['customer' => "☃"];
         $enc = $method->invoke(null, $v);
         $this->assertSame($enc, $v);
 
         // Encodes latin-1 -> UTF-8
-        $v = array('customer' => "\xe9");
+        $v = ['customer' => "\xe9"];
         $enc = $method->invoke(null, $v);
-        $this->assertSame($enc, array('customer' => "\xc3\xa9"));
+        $this->assertSame($enc, ['customer' => "\xc3\xa9"]);
     }
 
     // request retry
 
     public function testRetryDisabled()
     {
-        $this->setUpResponses(array($this->rateLimitResponse));
+        $this->setUpResponses([$this->rateLimitResponse]);
         $requestor = new ApiRequestor(self::API_KEY);
 
         try {
@@ -96,7 +96,7 @@ class ApiRequestorTest extends TestCase
 
     public function testNoRetry()
     {
-        $this->setUpResponses(array($this->errorResponse));
+        $this->setUpResponses([$this->errorResponse]);
         $requestor = new ApiRequestor(self::API_KEY);
 
         try {
@@ -110,7 +110,7 @@ class ApiRequestorTest extends TestCase
     public function testFullRetryAndSuccess()
     {
         Payjp::setMaxRetry(2);
-        $this->setUpResponses(array($this->rateLimitResponse, $this->rateLimitResponse, $this->successResponse));
+        $this->setUpResponses([$this->rateLimitResponse, $this->rateLimitResponse, $this->successResponse]);
         $requestor = new ApiRequestor(self::API_KEY);
 
         $response = $requestor->request('GET', '/v1/accounts');
@@ -121,7 +121,7 @@ class ApiRequestorTest extends TestCase
     public function testFullRetryAndFailed()
     {
         Payjp::setMaxRetry(2);
-        $this->setUpResponses(array($this->rateLimitResponse, $this->rateLimitResponse, $this->rateLimitResponse));
+        $this->setUpResponses([$this->rateLimitResponse, $this->rateLimitResponse, $this->rateLimitResponse]);
         $requestor = new ApiRequestor(self::API_KEY);
 
         try {
