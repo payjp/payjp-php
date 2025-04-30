@@ -23,3 +23,6 @@ clover.xml
 
 # Ignore PHPUnit cache file
 .phpunit.result.cache
+
+# Ignore PHP-CS-Fixer cache file
+.php-cs-fixer.cache

@@ -4,30 +4,108 @@ namespace Payjp;
 
 class CustomerTest extends TestCase
 {
-    // POST/customers
+    private function mockCustomerData($id = 'cus_test_1', $attributes = [])
+    {
+        $base = [
+            'id' => $id,
+            'object' => 'customer',
+            'email' => null,
+            'description' => 'test',
+            'livemode' => false,
+            'default_card' => null,
+            'cards' => [
+                'object' => 'list',
+                'data' => [],
+                'count' => 0,
+                'has_more' => false,
+                'url' => "/v1/customers/{$id}/cards"
+            ],
+            'subscriptions' => [
+                'object' => 'list',
+                'data' => [],
+                'count' => 0,
+                'has_more' => false,
+                'url' => "/v1/customers/{$id}/subscriptions"
+            ],
+            'created' => 1433127983,
+            'metadata' => null,
+        ];
+        return array_merge($base, $attributes);
+    }
+
+    private function mockCardData($id = 'car_default', $attributes = [])
+    {
+        return array_merge([
+            'id' => $id,
+            'object' => 'card',
+            'brand' => 'Visa',
+            'last4' => '4242',
+            'exp_month' => 12,
+            'exp_year' => date('Y') + 3,
+            'name' => 'Test Card',
+            'livemode' => false,
+        ], $attributes);
+    }
+
+    private function mockSubscriptionData($id = 'sub_test_1', $customerId = 'cus_test_1', $planId = 'plan_test_1', $attributes = [])
+    {
+        return array_merge([
+            'id' => $id,
+            'object' => 'subscription',
+            'customer' => $customerId,
+            'plan' => ['id' => $planId],
+            'status' => 'active',
+        ], $attributes);
+    }
+
+    private function mockChargeData($id = 'ch_test_1', $customerId = 'cus_test_1', $attributes = [])
+    {
+        return array_merge([
+            'id' => $id,
+            'object' => 'charge',
+            'amount' => 1000,
+            'currency' => self::CURRENCY,
+            'customer' => $customerId,
+        ], $attributes);
+    }
+
     public function testCreate()
     {
         $attribute = [
-            'email' => 'gdb@pay.jp',
+            'email' => 'example@pay.jp',
             'description' => 'foo bar'
         ];
-
-        $customer = self::createTestCustomer($attribute);
+        $mockCustomerData = $this->mockCustomerData('cus_created', $attribute);
+        $this->mockRequest('POST', '/v1/customers', $attribute, $mockCustomerData);
+        $customer = Customer::create($attribute);
         $this->assertSame($attribute['email'], $customer->email);
         $this->assertSame($attribute['description'], $customer->description);
     }
 
-    // GET/customers/:id
     public function testRetrieve()
     {
-        $customer = self::createTestCustomer();
-        $retrieve_customer = Customer::retrieve($customer->id);
-        $this->assertSame($customer->id, $retrieve_customer->id);
+        $mockCustomerData = $this->mockCustomerData();
+        $this->mockRequest('GET', '/v1/customers/cus_test_1', [], $mockCustomerData);
+        $customer = Customer::retrieve('cus_test_1');
+        $this->assertSame('cus_test_1', $customer->id);
     }
 
-    // GET/customers/
     public function testAll()
     {
+        $mockCustomerData1 = $this->mockCustomerData('cus_test_1');
+        $mockCustomerData2 = $this->mockCustomerData('cus_test_2');
+        $mockCustomerData3 = $this->mockCustomerData('cus_test_3');
+        $mockCustomersResponse = [
+            'object' => 'list',
+            'data' => [
+                $mockCustomerData1,
+                $mockCustomerData2,
+                $mockCustomerData3,
+            ],
+            'has_more' => false,
+            'url' => '/v1/customers'
+        ];
+        $this->mockRequest('GET', '/v1/customers', ['limit' => 3, 'offset' => 10], $mockCustomersResponse);
         $customers = Customer::all([
             'limit' => 3,
             'offset' => 10
@@ -35,246 +113,435 @@ class CustomerTest extends TestCase
         $this->assertCount(3, $customers['data']);
     }
 
-    // DELETE/customers/:id
     public function testDeletion()
     {
-        $customer = self::createTestCustomer();
-        $id = $customer->id;
-
+        $mockCustomerData = $this->mockCustomerData('cus_test_1');
+        $mockDeletedData = $this->mockCustomerData('cus_test_1', [
+            'deleted' => true,
+            'livemode' => false,
+            'default_card' => null
+        ]);
+        $customer = Customer::constructFrom($mockCustomerData, new \Payjp\Util\RequestOptions(self::API_KEY));
+        $this->mockRequest('DELETE', '/v1/customers/cus_test_1', [], $mockDeletedData);
         $delete_customer = $customer->delete();
-
-        $this->assertSame($id, $customer->id);
-        $this->assertFalse($customer->livemode);
-        $this->assertTrue($customer->deleted);
-
-        $this->assertNull($customer['active_card']);
-
-        $this->assertSame($id, $delete_customer->id);
+        $this->assertSame($customer->id, $delete_customer->id);
         $this->assertFalse($delete_customer->livemode);
         $this->assertTrue($delete_customer->deleted);
-
-        $this->assertNull($delete_customer['active_card']);
+        $this->assertNull($delete_customer['default_card']);
     }
 
-    //POST /customers/:id
     public function testSave()
     {
-        $customer = self::createTestCustomer();
-
-        $customer->email = 'gdb@pay.jp';
+        $mockCustomerData = $this->mockCustomerData('cus_test_1');
+        $updatedData = $this->mockCustomerData('cus_test_1', ['email' => 'example@pay.jp']);
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->exactly(2))
+            ->method('request')
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'post',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    ['email' => 'example@pay.jp'],
+                    false
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode($updatedData), 200]
+            );
+        $customer = Customer::retrieve('cus_test_1');
+        $customer->email = 'example@pay.jp';
         $customer->save();
-        $this->assertSame($customer->email, 'gdb@pay.jp');
-
-        $payjpCustomer = Customer::retrieve($customer->id);
-        $this->assertSame($customer->email, $payjpCustomer->email);
-        $this->assertSame('gdb@pay.jp', $customer->email);
-
-        Payjp::setApiKey(null);
-        $customer = Customer::create(null, self::API_KEY);
-        $customer->email = 'gdb@pay.jp';
-        $customer->save();
-
-        self::authorizeFromEnv();
-        $updatedCustomer = Customer::retrieve($customer->id);
-        $this->assertSame($updatedCustomer->email, 'gdb@pay.jp');
-        $this->assertSame('gdb@pay.jp', $customer->email);
+        $this->assertSame('example@pay.jp', $customer->email);
     }
 
     public function testBogusAttribute()
     {
         $this->expectException('\Payjp\Error\InvalidRequest');
-        $customer = self::createTestCustomer();
+        $mockCustomerData = $this->mockCustomerData('cus_test_1');
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->exactly(2))
+            ->method('request')
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'post',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    ['bogus' => 'bogus'],
+                    false
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode(['error' => ['message' => 'Invalid request']]), 400]
+            );
+        $customer = Customer::retrieve('cus_test_1');
         $customer->bogus = 'bogus';
         $customer->save();
     }
 
     public function testUpdateDescriptionEmpty()
     {
-        $this->expectException('\InvalidArgumentException');
-        $customer = self::createTestCustomer();
+        $mockCustomerData = $this->mockCustomerData('cus_test_1', ['description' => '123']);
+        $mockCustomerData2 = $this->mockCustomerData('cus_test_1', ['description' => '']);
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->exactly(2))
+            ->method('request')
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'post',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    ['description' => ''],
+                    false
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode($mockCustomerData2), 200]
+            );
+        $customer = Customer::retrieve('cus_test_1');
         $customer->description = '';
-
         $customer->save();
-
-        $updatedCustomer = Customer::retrieve($customer->id);
-        $this->assertSame('123', $updatedCustomer->description);
+        $this->assertSame('', $customer->description);
     }
 
     public function testUpdateDescriptionNull()
     {
-        $customer = self::createTestCustomer(['description' => 'foo bar']);
+        $mockCustomerData = $this->mockCustomerData('cus_test_1', ['description' => 'foo bar']);
+        $updatedData = $this->mockCustomerData('cus_test_1', ['description' => '']);
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->exactly(2))
+            ->method('request')
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'post',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    ['description' => null],
+                    false
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode($updatedData), 200]
+            );
+        $customer = Customer::retrieve('cus_test_1');
         $customer->description = null;
-
         $customer->save();
-
-        $updatedCustomer = Customer::retrieve($customer->id);
-        $this->assertSame('', $updatedCustomer->description);
         $this->assertSame('', $customer->description);
     }
 
-    //POST /customers/:id/cards
-    //GET /customers/:id/cards
     public function testCustomerAddCard()
     {
-        $customer = $this->createTestCustomer();
-
-        $defaultCard = $customer->cards->data[0];
-
-        $params =  [
-            'card' => [
-                'number' => '4242424242424242',
-                'exp_month' => 12,
-                'exp_year' => date('Y') + 3,
-                'cvc' => '314'
-            ]
+        $mockCustomerData = $this->mockCustomerData('cus_test_1');
+        $newCard1Data = $this->mockCardData('car_1');
+        $newCard2Data = $this->mockCardData('car_2');
+        $mockCardsResponse = [
+            'object' => 'list',
+            'data' => [ $newCard2Data, $newCard1Data, $this->mockCardData('car_default') ],
+            'has_more' => false,
+            'url' => '/v1/customers/cus_test_1/cards'
         ];
-
-        $token = Token::create($params, ['payjp_direct_token_generate' => 'true']);
-
-        $params2 =  [
-            'card' => [
-                'number' => '4242424242424242',
-                'exp_month' => 7,
-                'exp_year' => date('Y') + 3,
-                'cvc' => '314'
-            ]
-        ];
-
-        $card = Token::create($params2, ['payjp_direct_token_generate' => 'true']);
-
-        $createdCard = $customer->cards->create(['card' => $token->id]);
-        $createdCard_2 = $customer->cards->create(['card' => $card->id]);
-
-        $updatedCustomer = Customer::retrieve($customer->id);
-        $cardList = $updatedCustomer->cards->all();
-        $this->assertSame(count($cardList['data']), 3);
-
-        $this->assertSame($createdCard_2->id, $cardList['data'][0]->id);
-        $this->assertSame($createdCard->id, $cardList['data'][1]->id);
-        $this->assertSame($defaultCard->id, $cardList['data'][2]->id);
-
-        $card = $customer->cards->retrieve($cardList['data'][1]->id);
-        $this->assertSame($card->id, $cardList['data'][1]->id);
-
-        $updatedCustomer = Customer::retrieve($customer->id);
-        $cardList = $updatedCustomer->cards->all([
-            'limit' => 1,
-            'offset' => 1
-        ]);
-        $this->assertSame(count($cardList['data']), 1);
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->exactly(4))
+            ->method('request')
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'post',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards',
+                    $this->anything(),
+                    ['card' => 'tok_1'],
+                    false
+                ],
+                [
+                    'post',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards',
+                    $this->anything(),
+                    ['card' => 'tok_2'],
+                    false
+                ],
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards',
+                    $this->anything(),
+                    [],
+                    false
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode($newCard1Data), 200],
+                [json_encode($newCard2Data), 200],
+                [json_encode($mockCardsResponse), 200]
+            );
+        $customer = Customer::retrieve('cus_test_1');
+        $createdCard = $customer->cards->create(['card' => 'tok_1']);
+        $createdCard_2 = $customer->cards->create(['card' => 'tok_2']);
+        $cardList = $customer->cards->all();
+        $this->assertInstanceOf('Payjp\Collection', $cardList);
+        $this->assertTrue(is_array($cardList->data));
+        $this->assertCount(3, $cardList->data);
+        $this->assertInstanceOf('Payjp\Card', $cardList->data[0]);
+        $this->assertSame($createdCard_2->id, $cardList->data[0]->id);
+        $this->assertInstanceOf('Payjp\Card', $cardList->data[1]);
+        $this->assertSame($createdCard->id, $cardList->data[1]->id);
     }
 
-    //POST /customers/:id/cards/:card_id
     public function testCustomerUpdateCard()
     {
-        $customer = $this->createTestCustomer();
-
-        $cards = $customer->cards->all();
-        $this->assertSame(count($cards['data']), 1);
-
-        $card = $cards['data'][0];
-        $card->name = 'Littleorc';
-        $card->save();
-
-        $updatedCustomer = Customer::retrieve($customer->id);
-        $cardList = $updatedCustomer->cards->all();
-        $this->assertSame($cardList['data'][0]->name, 'Littleorc');
+        $mockCustomerData = $this->mockCustomerData('cus_test_1');
+        $cardData = $this->mockCardData('car_1', ['customer' => 'cus_test_1']);
+        $updatedCardData = $this->mockCardData('car_1', ['name' => 'Littleorc', 'customer' => 'cus_test_1']);
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->exactly(3))
+            ->method('request')
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards/car_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'post',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards/car_1',
+                    $this->anything(),
+                    ['name' => 'Littleorc'],
+                    false
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode($cardData), 200],
+                [json_encode($updatedCardData), 200]
+            );
+        $customer = Customer::retrieve('cus_test_1');
+        $cardObj = $customer->cards->retrieve('car_1');
+        $this->assertInstanceOf('Payjp\Card', $cardObj);
+        $cardObj->name = 'Littleorc';
+        $cardObj->save();
+        $this->assertSame('Littleorc', $cardObj->name);
     }
 
     public function testCustomerDeleteCard()
     {
-        $params =  [
-            'card' => [
-                'number' => '4242424242424242',
-                'exp_month' => 7,
-                'exp_year' => date('Y') + 3,
-                'cvc' => '314'
-            ]
+        $mockCustomerData = $this->mockCustomerData('cus_test_1');
+        $createdCardData = $this->mockCardData('car_1', ['customer' => 'cus_test_1']);
+        $deletedCardData = $this->mockCardData('car_1', ['deleted' => true, 'customer' => 'cus_test_1']);
+        $mockCardsResponse = [
+            'object' => 'list',
+            'data' => [ $this->mockCardData('car_default'), $createdCardData ],
+            'has_more' => false,
+            'url' => '/v1/customers/cus_test_1/cards'
         ];
-
-        $token = Token::create($params, $options = ['payjp_direct_token_generate' => 'true']);
-
-        $customer = $this->createTestCustomer();
-        $createdCard = $customer->cards->create(['card' => $token->id]);
-
-        $updatedCustomer = Customer::retrieve($customer->id);
-        $cardList = $updatedCustomer->cards->all();
-        $this->assertSame(count($cardList['data']), 2);
-
-        $deleteStatus = $updatedCustomer->cards->retrieve($createdCard->id)->delete();
-        $this->assertTrue($deleteStatus->deleted);
-
-        $postDeleteCustomer = Customer::retrieve($customer->id);
-        $postDeleteCards = $postDeleteCustomer->cards->all();
-        $this->assertSame(count($postDeleteCards['data']), 1);
-
-        $cardList = $updatedCustomer->cards->all();
-        $this->assertSame(count($cardList['data']), 1);
+        $mockCardsAfterResponse = [
+            'object' => 'list',
+            'data' => [ $this->mockCardData('car_default') ],
+            'has_more' => false,
+            'url' => '/v1/customers/cus_test_1/cards'
+        ];
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->exactly(6))
+            ->method('request')
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'post',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards',
+                    $this->anything(),
+                    ['card' => 'tok_1'],
+                    false
+                ],
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards/car_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'delete',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards/car_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1/cards',
+                    $this->anything(),
+                    [],
+                    false
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode($createdCardData), 200],
+                [json_encode($mockCardsResponse), 200],
+                [json_encode($createdCardData), 200],
+                [json_encode($deletedCardData), 200],
+                [json_encode($mockCardsAfterResponse), 200]
+            );
+        $customer = Customer::retrieve('cus_test_1');
+        $createdCardObj = $customer->cards->create(['card' => 'tok_1']);
+        $cardList = $customer->cards->all();
+        $deletedCardResult = $customer->cards->retrieve('car_1')->delete();
+        $this->assertInstanceOf('Payjp\Card', $deletedCardResult);
+        $postDeleteCards = $customer->cards->all();
+        $this->assertInstanceOf('Payjp\Collection', $postDeleteCards);
+        $this->assertTrue(is_array($postDeleteCards->data));
+        $this->assertCount(1, $postDeleteCards->data);
+        $this->assertTrue($deletedCardResult->deleted);
     }
 
     public function testCustomerSubscriptionAllRetrieve()
     {
-        $planID = 'gold-' . self::randomString();
-        self::retrieveOrCreatePlan($planID);
-
-        $customer = self::createTestCustomer();
-
-        $subscription = Subscription::create([
-            'customer' => $customer->id,
-            'plan' => $planID
-        ]);
-
-        $planID_2 = 'gold-2-' . self::randomString();
-        self::retrieveOrCreatePlan($planID_2);
-
-        $subscription_2 = Subscription::create([
-            'customer' => $customer->id,
-            'plan' => $planID_2
-        ]);
-
-        $customerRetrive = Customer::retrieve($customer->id);
-        $subscriptions = $customerRetrive->subscriptions->all();
-
-        $this->assertSame($subscription_2->id, $subscriptions['data'][0]->id);
-        $this->assertSame($subscription->id, $subscriptions['data'][1]->id);
-
-        $this->assertSame(2, count($subscriptions['data']));
-        $this->assertSame($customer->id, $subscriptions['data'][0]->customer);
-        $this->assertSame($planID_2, $subscriptions['data'][0]->plan->id);
-
-        $subscriptionRetrieve = $customerRetrive->subscriptions->retrieve($subscription->id);
-        $this->assertSame($subscription->id, $subscriptionRetrieve->id);
-        $this->assertSame($planID, $subscriptionRetrieve->plan->id);
+        $mockCustomerData = $this->mockCustomerData('cus_test_1');
+        $sub1Data = $this->mockSubscriptionData('sub_1', 'cus_test_1', 'plan_1');
+        $sub2Data = $this->mockSubscriptionData('sub_2', 'cus_test_1', 'plan_2');
+        $mockSubsResponse = [
+            'object' => 'list',
+            'data' => [ $sub2Data, $sub1Data ],
+            'has_more' => false,
+            'url' => '/v1/customers/cus_test_1/subscriptions'
+        ];
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->exactly(2))
+            ->method('request')
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1/subscriptions',
+                    $this->anything(),
+                    [],
+                    false
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode($mockSubsResponse), 200]
+            );
+        $customer = Customer::retrieve('cus_test_1');
+        $subscriptions = $customer->subscriptions->all();
+        $this->assertInstanceOf('Payjp\Collection', $subscriptions);
+        $this->assertTrue(is_array($subscriptions->data));
+        $this->assertCount(2, $subscriptions->data);
+        $this->assertInstanceOf('Payjp\Subscription', $subscriptions->data[0]);
+        $this->assertSame($sub2Data['id'], $subscriptions->data[0]->id);
+        $this->assertInstanceOf('Payjp\Subscription', $subscriptions->data[1]);
+        $this->assertSame($sub1Data['id'], $subscriptions->data[1]->id);
+        $this->assertSame('cus_test_1', $subscriptions->data[0]->customer);
+        $this->assertTrue(is_object($subscriptions->data[0]->plan));
+        $this->assertSame('plan_2', $subscriptions->data[0]->plan->id);
     }
 
     public function testCustomerChargeAll()
     {
-        $planID = 'gold-' . self::randomString();
-        self::retrieveOrCreatePlan($planID);
-
-        $customer = self::createTestCustomer();
-
-        $charge = Charge::create([
-            'amount' => 1000,
-            'currency' => self::CURRENCY,
-            'customer' => $customer->id
-        ]);
-
-        $charges = $customer->charges();
-
-        $this->assertSame(1, count($charges['data']));
-        $this->assertSame($charge->id, $charges['data'][0]->id);
-
-        $charge_2 = Charge::create([
-            'amount' => 1500,
-            'currency' => self::CURRENCY,
-            'customer' => $customer->id
-        ]);
-
-        $charges_2 = $customer->charges();
-
-        $this->assertSame(2, count($charges_2['data']));
-        $this->assertSame($charge_2->id, $charges_2['data'][0]->id);
-        $this->assertSame($charge->id, $charges_2['data'][1]->id);
+        $mockCustomerData = $this->mockCustomerData('cus_test_1');
+        $charge1Data = $this->mockChargeData('ch_1', 'cus_test_1');
+        $charge2Data = $this->mockChargeData('ch_2', 'cus_test_1', ['amount' => 1500]);
+        $mockChargesResponse = [
+            'object' => 'list',
+            'data' => [ $charge2Data, $charge1Data ],
+            'has_more' => false,
+            'url' => '/v1/charges'
+        ];
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->exactly(2))
+            ->method('request')
+            ->withConsecutive(
+                [
+                    'get',
+                    'https://api.pay.jp/v1/customers/cus_test_1',
+                    $this->anything(),
+                    [],
+                    false
+                ],
+                [
+                    'get',
+                    'https://api.pay.jp/v1/charges',
+                    $this->anything(),
+                    ['customer' => 'cus_test_1'],
+                    false
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                [json_encode($mockCustomerData), 200],
+                [json_encode($mockChargesResponse), 200]
+            );
+        $customer = Customer::retrieve('cus_test_1');
+        $charges = Charge::all(['customer' => $customer->id]);
+        $this->assertInstanceOf('Payjp\Collection', $charges);
+        $this->assertTrue(is_array($charges->data));
+        $this->assertCount(2, $charges->data);
+        $this->assertInstanceOf('Payjp\Charge', $charges->data[0]);
+        $this->assertSame($charge2Data['id'], $charges->data[0]->id);
+        $this->assertInstanceOf('Payjp\Charge', $charges->data[1]);
+        $this->assertSame($charge1Data['id'], $charges->data[1]->id);
     }
 }

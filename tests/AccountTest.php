@@ -6,7 +6,7 @@ class AccountTest extends TestCase
 {
     private function managedAccountResponse($id)
     {
-        return [
+        $data = [
             'accounts_enabled' => [
                 'merchant',
                 'customer',
@@ -80,6 +80,7 @@ class AccountTest extends TestCase
             ],
             'object' => 'account'
         ];
+        return $data;
     }
 
     public function testBasicRetrieve()
@@ -87,8 +88,19 @@ class AccountTest extends TestCase
         $this->mockRequest('GET', '/v1/accounts', [], $this->managedAccountResponse('acct_ABC'));
         $account = Account::retrieve();
 
+        $this->assertInstanceOf('Payjp\Account', $account);
         $this->assertSame('acct_ABC', $account->id);
+
+        $this->assertInstanceOf('Payjp\PayjpObject', $account->customer);
         $this->assertSame('acct_cus_38153121efdb7964dd1e147', $account->customer->id);
+
+        $this->assertInstanceOf('Payjp\PayjpObject', $account->merchant);
         $this->assertSame('acct_mch_002418151ef82e49f6edee1', $account->merchant->id);
+
+        $this->assertInstanceOf('Payjp\Collection', $account->customer->cards);
+        $this->assertTrue(is_array($account->customer->cards->data));
+        $this->assertCount(1, $account->customer->cards->data);
+        $this->assertInstanceOf('Payjp\Card', $account->customer->cards->data[0]);
+        $this->assertSame('car_99abf74cb5527ff68233a8b836dd', $account->customer->cards->data[0]->id);
     }
 }

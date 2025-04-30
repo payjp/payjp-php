@@ -24,6 +24,10 @@ class UtilTest extends TestCase
 
     public function testConvertPayjpObjectToArrayIncludesId()
     {
+        $mock = $this->setUpMockRequest();
+        $mock->expects($this->any())
+            ->method('request')
+            ->willReturn([json_encode(['id' => 'cus_mocked']), 200]);
         $customer = self::createTestCustomer();
         $this->assertTrue(array_key_exists("id", $customer->__toArray(true)));
     }
